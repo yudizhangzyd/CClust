@@ -1,0 +1,22 @@
+Package: CClust
+Type: Package
+Title: Clustering Categorical Datasets
+Version: 0.1.0
+Author: Yudi Zhang, karin Dorman
+Maintainer: Yudi Zhang <yudiz@iastate.edu>
+Description: An R package that implement unsupervised clustering on categorical datasets.
+             It can be used to cluster datasets with quality information, such as the
+             amplicon datasets with quality scores as quality information and also general
+             datasets without that quality information.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 2.10)
+Improts:
+    mclust
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 2.1.0)
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr
