@@ -37,6 +37,7 @@
 #'    \item \code{"data_dim"}: Dimension of input data.
 #' }
 #'
+#' @useDynLib CClust r_khaplotype
 #' @importFrom checkmate expect_file_exists expect_string expect_choice
 #' @export khaplotype
 #'
@@ -77,8 +78,8 @@ khaplotype <- function(K = 1,
                                                   "FASTQ_MACQUEEN", "FASTQ_HW"),
                            info = "The algorithm specificed is not avaiable in khaplotype clustering.")
 
-  if (!is.loaded("r_khaplotype", PACKAGE = "khaplotype")) {
-    dyn.load("../src/khaplotype.so")
+  if (!is.loaded("r_khaplotype", PACKAGE = "CClust")) {
+    dyn.load("../src/CClust.so")
   }
 
   K <- as.integer(K)
@@ -112,5 +113,4 @@ khaplotype <- function(K = 1,
 
   return(res)
 } # khaplotype
-
 

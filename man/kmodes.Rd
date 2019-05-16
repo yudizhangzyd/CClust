@@ -4,7 +4,7 @@
 \alias{kmodes}
 \title{Clustering categorical datasets.}
 \usage{
-kmodes(K = 5, datafile = "data/zoo.int.data")
+kmodes(K = 5, datafile = "../data/zoo.int.data")
 }
 \arguments{
 \item{K}{Number of clusters. Default is 1.}

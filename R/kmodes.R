@@ -46,6 +46,7 @@
 #'    \item \code{"data_dim"}: Dimension of input data.
 #' }
 #'
+#' @useDynLib CClust r_kmodes
 #' @importFrom checkmate expect_file_exists expect_string expect_choice
 #' @export kmodes
 #'
@@ -82,8 +83,8 @@ kmodes <- function(K = 1,
                                                     "KMODES_INIT_CLB09_RANDOM", "KMODES_INIT_AV07", "KMODES_INIT_AV07_GREEDY"),
                            info = "The initialization method specificed is not avaiable in kmodes clustering.")
 
-  if (!is.loaded("r_kmodes", PACKAGE = "kmodes")) {
-    dyn.load("../src/kmodes.so")
+  if (!is.loaded("r_kmodes", PACKAGE = "CClust")) {
+    dyn.load("../src/CClust.so")
   }
 
   K <- as.integer(K)

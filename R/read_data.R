@@ -3,6 +3,10 @@
 #' Read a fastq file and encode Phred quality score from 0 to 93 using ASCII 33 to 126.
 #'
 #' @param datafile Path to a fastq file.
+#'
+#' @useDynLib CClust r_read_fastq
+#'
+#' @importFrom checkmate expect_file_exists
 #' @export read_fastq
 #'
 #' @return Return a list contains reads, quality socres and dim of the data.
@@ -17,8 +21,8 @@ read_fastq <- function(datafile = NULL)
   if (tail(unlist(strsplit(datafile, "[.]")), 1) != "fastq")
     stop("The input datafile has to be fastq file when setting run_with_quals = TRUE!")
 
-  if (!is.loaded("r_read_fastq", PACKAGE = "khaplotype")) {
-    dyn.load("../src/khaplotype.so")
+  if (!is.loaded("r_read_fastq", PACKAGE = "CClust")) {
+    dyn.load("../src/CClust.so")
   }
 
   res <- .Call("r_read_fastq", datafile)

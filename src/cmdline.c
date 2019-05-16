@@ -320,3 +320,48 @@ int is_numeric(const char *argv)
 			return 0;
 	return 1;
 }/* is_numeric */
+
+
+/**
+ * print command line usage
+ *
+ * @param fp file
+ * @param cmdname command line
+ * @param obj option struct
+ */
+void fprint_usage(FILE *fp, const char *cmdname, void *obj)
+{
+	size_t start = strlen(cmdname) - 1;
+	
+	while (cmdname[start] != '/' && start) start--;
+	if (cmdname[start] == '/') start++;
+	
+	for (size_t i = start; i < strlen(cmdname); ++i) fputc(toupper(cmdname[i]), fp);
+	fprintf(fp, "(%d)\n", 1);
+	fprintf(fp, "\nNAME\n\t%s - cluster observations with categorical predictors\n", &cmdname[start]);
+	fprintf(fp, "\nSYNOPSIS\n\t%s [-r <rulong> -n <nuint> -a|-e|-l|-w|-d -i <istr>|<iuint1...k> -o <ofile>] -k <kuint> -f <ffile> ...\n", &cmdname[start]);
+	fprintf(fp, "\nDESCRIPTION\n\t%s clusters observations found in file <ffile> into <kuint> clusters.  It randomly initialize <iuint> times after setting random number seed <sulong>.\n", &cmdname[start]);
+	fprintf(fp, "\nOPTIONS\n");
+	fprintf(fp, "\t-k <kuint>\n\t\tSet the desired number of clusters K.\n");
+	fprintf(fp, "\t-x <kuint>\n\t\tSet the cut-off value for mean expected error(default is 2.0).\n");
+	fprintf(fp, "\t-z <kuint>\n\t\tSet the cut-off value for abundance in the hash table(default is 3).\n");
+	fprintf(fp, "\t-y <kuint>\n\t\tSet the cut-off value for the proportion of BIC(default is 0.005).\n");
+	fprintf(fp, "\t-b\n\t\tTest on categorical data without quality score [NOTICE: Hartigan and Wong is slow compared to other k-modes method!].\n");
+	fprintf(fp, "\t-l\n\t\tRun Lloyd's algorithm.\n");
+	fprintf(fp, "\t-e\n\t\tRun Lloyd's efficient algotithm for haplotype.\n");
+	fprintf(fp, "\t-a\n\t\tRun Macqueen(Huang)'s algorithm.\n");
+	fprintf(fp, "\t-w\n\t\tRun Hartigan and Wong algorithm.\n");
+	fprintf(fp, "\t-d\n\t\tRun Efficient Hartigan and Wong algorithm.\n");
+	fprintf(fp, "\t--shuffle\n\t\tShuffle the data input order on each initialization.\n");
+	fprintf(fp, "\t-s <sn> <sp> <sc> <st1> <st2>\n\t\tSimulation size (observations by coordinates by categories) and times.\n");
+	fprintf(fp, "\t-f <ffile> \n\t\tSet the input filename.\n");
+	fprintf(fp, "\t-o <ofile> \n\t\tSet the output filename.\n");
+	fprintf(fp, "\t-i <istr>\n\t\tSet initialization method (rnd|filter).\n");
+	fprintf(fp, "\t\t'rnd' randomly selects seeds.\n");
+	fprintf(fp, "\t\t'filter' filtering by hash table and expected mean error to select seeds.\n");
+	fprintf(fp, "\t-r <rulong>\n\t\tSet random number seed. [OPTIONAL]\n");
+	fprintf(fp, "\t-h\n\t\tThis help.\n");
+	fprintf(fp, "\n");
+	for (size_t i = start; i < strlen(cmdname); ++i) fputc(toupper(cmdname[i]), fp);
+	fprintf(fp, "(%d)\n", 1);
+} /* fprint_usage */

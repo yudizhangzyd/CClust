@@ -16,7 +16,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.align = "center"
+  fig.align = "center" 
 )
 ```
 
@@ -25,6 +25,11 @@ knitr::opts_chunk$set(
 # Introduction
 
 `CClust` is an R package developed to help with clustering categorical datasets. The package can be installed from GitHub using devtools and then loaded in the usual way.
+
+```{r eval = FALSE}
+# Installs redres from GitHub
+devtools::install_github("yudizhangzyd/CClust")
+```
 
 ```{r}
 # Loads the package
@@ -49,7 +54,7 @@ There are two main functions `kmodes` and `khaplotype` coded for clsutering cate
     
 \vspace{0.25cm}
 
-3. [Evaluation](#evaluation): Lastly, `CClust` can be employed to evaluate the clustering result by computing the Adjusted Rand Index with the use function `adjustedRandIndex` in package `mclust`. This is done using the function [**`ARI`**](#ARI).
+3. [Evaluation](#evaluation): Lastly, `CClust` can be employed to evaluate the clustering result by computing the Adjusted Rand Index with the use function `adjustedRandIndex` in package `mclust`. This is done using the function [**`ARI`**](#ARI). And there is a function [**`plot_cluster`**](#plot_cluster) in this package to help people visulize the clustering results.
 
 This vignette is set up to mimic the package structure. The sections after the introduction are dedicated to one of the three package uses. Additional details on the functions are included in these sections along with explanations of how to interpret the output and examples.
 
@@ -122,8 +127,8 @@ The code below demonstrates the use of `read_fastq`.
 dat <- read_fastq(datafile = "../data/sim.fastq")
 
 # Prints the head of the data
-head(dat$reads)
-head(dat$quality)
+dat$reads[1:3, 1:10]
+dat$quality[1:3, 1:10]
 dat$dim
 ```
 
@@ -274,5 +279,29 @@ true_assignments <- as.numeric(read.table("../data/assignment.txt", header = F, 
 ARI(res_khap, true_assignments)
 ```
 
+## Plotting {#Plotting}
 
+The function `plot_cluster` helps to visulize clusters after using the cluster algorithms implemented in the functions. This cluster plot make use of the function \code{dapc} from package \code{adegenet} and function \code{scatter} from package \code{ade4}. The plot is based on observation assignment and discriminant analysis of principal components, therefore, when running the code, it will asks users to choose the number PCs to retain and choose the number  discriminant functions to retain.
 
+**Inputs**
+
+- `dat` Input data.
+- `res` Results returned from `kmodes` or `khaplotype`.
+
+**Output**
+
+- A plot reflecting clustering results.
+
+**Functionality** 
+The code below shows how to plot clusters after running the clustering algorithms using function `plot_cluster`.
+
+```{r, eval = FALSE}
+# read the data and use the function `kmodes` with default setting to do the clustering
+data <- read.table("../data/zoo.int.data")
+res_kmodes <- kmodes(K = 5, datafile = "../data/zoo.int.data", algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
+
+# Plot the clusters
+plot_cluster(data, res_kmodes)
+```
+
+<img align="center" height="400" src="figs/clusters_kmodes.png">
