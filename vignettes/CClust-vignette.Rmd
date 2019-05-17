@@ -50,7 +50,7 @@ There are two main functions `kmodes` and `khaplotype` coded for clsutering cate
 
 2. [Clustering](#clustering): The second way to utilize `CClust` is to clustering categorical datasets using the following functions.
     -[**`khaplotype`**](#khaplotype): Clustering the amplicon datasets with quality scores, only random initialization is avaiable in `khaplotype`.
-    -[**`kmodes`**](#kmodes): Clustering categorical datasets without quality information about the data, different from function `khaplotype`, it has six different random initialization methods.
+    -[**`kmodes`**](#kmodes): Clustering categorical datasets without quality information of the data, different from function `khaplotype`, it has six different random initialization methods.
     
 \vspace{0.25cm}
 

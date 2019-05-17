@@ -72,10 +72,61 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-An R package that implement unsupervised clustering on categorical datasets.
-             It can be used to cluster datasets with quality information, such as the
-             amplicon datasets with quality scores as quality information and also general
-             datasets without that quality information.
+
+<p><code>CClust</code> is an R package developed to help with clustering categorical datasets. The package can be installed from GitHub using devtools and then loaded in the usual way.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p><code>CClust</code> can be installed from the GitHub repository using the devtools package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Installs CClust</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"yudizhangzyd/CClust"</span>)</a></code></pre></div>
+<p>Once installed, the package can be loaded as usual.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Loads the library</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(CClust)</a></code></pre></div>
+</div>
+<div id="functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#functions" class="anchor"></a>Functions</h2>
+<p>The package contains the following functions.</p>
+<div id="read_fastq" class="section level4">
+<h4 class="hasAnchor">
+<a href="#read_fastq" class="anchor"></a>read_fastq</h4>
+<p><code>read_fastq</code> obtains amplicon datasets from a fastq file, extract and return a list of data information: reads, quality scores and dimension of data.</p>
+</div>
+<div id="kmodes" class="section level4">
+<h4 class="hasAnchor">
+<a href="#kmodes" class="anchor"></a>kmodes</h4>
+<p><code>kmodes</code> is for clustering categorical datasets without quality information of the data, different from function, it has six different random initialization methods and three k-means algorithms (Lloyd’s; MacQueen’s; Hartigan and Wong’s algorithm) were adapted to do clustering.</p>
+</div>
+<div id="khaplotype" class="section level4">
+<h4 class="hasAnchor">
+<a href="#khaplotype" class="anchor"></a>khaplotype</h4>
+<p><code>khaplotype</code> is for clustering the amplicon datasets with quality scores, only random initialization is avaiable, also three k-means algorithms (Lloyd’s; MacQueen’s; Hartigan and Wong’s algorithm) were adapted to do clustering.</p>
+</div>
+<div id="ari" class="section level4">
+<h4 class="hasAnchor">
+<a href="#ari" class="anchor"></a>ARI</h4>
+<p><code>ARI</code> is for computing the adjusted rand index given the estimated assignments and the true assiganments.</p>
+</div>
+<div id="plot_cluster" class="section level4">
+<h4 class="hasAnchor">
+<a href="#plot_cluster" class="anchor"></a>plot_cluster</h4>
+<p><code>plot_cluster</code></p>
+<p>Visulize clusters after using the cluster algorithms implemented in the functions. This cluster plot make use of the function \code{dapc} from package \code{adegenet} and function \code{scatter} from package \code{ade4}. The plot is based on observation assignment and discriminant analysis of principal components, therefore, when running the code, it will asks you to choose the number PCs to retain and choose the number discriminant functions to retain.</p>
+</div>
+</div>
+<div id="learn-more" class="section level2">
+<h2 class="hasAnchor">
+<a href="#learn-more" class="anchor"></a>Learn More</h2>
+<p>To learn more about <code>CClust</code>, read through the <a href="https://yudizhangzyd.github.io/CClust/articles/CClust-vignette.html">vignette</a> for <code>CClust</code> which contains:</p>
+<ul>
+<li>details on the three algorithms</li>
+<li>explanations of how to use the functions</li>
+<li>interpretations of the clustering asscessment</li>
+</ul>
+<p>Additionally, more information is available at the package <a href="https://yudizhangzyd.github.io/CClust/">website</a>.</p>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
