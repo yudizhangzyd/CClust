@@ -277,13 +277,13 @@
 <p>The code below shows how to use <code>khaplotype</code> by changing types of algorithms. If run the algorithm more than one initialization, the <code>khaplotype</code> function will return results of the initialization with the maximum <code>total_best_criterion</code>, which is the best solution among all of the initializations.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> <span class="st">"../data/sim.fastq"</span>, <span class="dt">n_init =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Time cost: 0.974926 secs</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Time cost: 1.085786 secs</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Time cost: 0.472362 secs</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Time cost: 0.495634 secs</span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.574064 secs</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.601334 secs</span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; Time cost is: 2.021467 secs</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; Time cost is: 2.182874 secs</span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; Best optimum is: -103562.999033</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co"># Number of observations in each cluster</span></a>
@@ -295,13 +295,13 @@
 <a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; [1] -103563</span></a></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> <span class="st">"../data/sim.fastq"</span>, <span class="dt">n_init =</span> <span class="dv">3</span>, <span class="dt">algorithm =</span> <span class="st">"FASTQ_MACQUEEN"</span>, <span class="dt">shuffle =</span> <span class="ot">TRUE</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Time cost: 0.067996 secs</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Time cost: 0.062384 secs</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; Log likelihood in 1th initialization: -197241.29 (2 iterations: 1552 4977)</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Time cost: 0.058768 secs</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Time cost: 0.053585 secs</span></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Log likelihood in 2th initialization: -230540.18 (1 iterations: 4272 5607)</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.045835 secs</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.043028 secs</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Log likelihood in 3th initialization: -200861.80 (1 iterations: 5070 17)</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Time cost is: 0.173392 secs</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Time cost is: 0.159764 secs</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Best optimum is: -197241.292293</span></a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co"># Number of observations in each cluster</span></a>
@@ -333,13 +333,13 @@
 <p>The code below shows how to access the clustering results using function <code>ARI</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># Estimate cluster assignments by function `khaplotype`.</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span> (<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> <span class="st">"../data/sim.fastq"</span>, <span class="dt">n_init =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Time cost: 0.990565 secs</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Time cost: 1.054704 secs</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Time cost: 0.498677 secs</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Time cost: 0.493262 secs</span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.587284 secs</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.612689 secs</span></a>
 <a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; Time cost is: 2.076656 secs</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; Time cost is: 2.160730 secs</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; Best optimum is: -103562.999033</span></a>
 <a class="sourceLine" id="cb8-11" data-line-number="11">true_assignments &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="st">"../data/assignment.txt"</span>, <span class="dt">header =</span> F, <span class="dt">sep =</span> <span class="st">""</span>))</a>
 <a class="sourceLine" id="cb8-12" data-line-number="12"></a>
