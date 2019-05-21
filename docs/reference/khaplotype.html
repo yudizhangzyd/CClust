@@ -117,7 +117,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/sim.fastq"</span>)</pre>
+    <pre class="usage"><span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"sim.fastq"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,18 +176,53 @@
 <li><p><code>"data_dim"</code>: Dimension of input data.</p></li>
 </ul>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><ul>
+<li><p>Lloyd S (1982).
+&#8220;Least squares quantization in PCM.&#8221;
+<em>Information Theory, IEEE Transactions on</em>, <b>28</b>(2), 129 - 137.</p></li>
+<li><p>MacQueen J (1967).
+&#8220;Some methods for classification and analysis of multivariate observations.&#8221;
+In Cam LML, Neyman J (eds.), <em>Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability</em>, volume 1, 281-297.</p></li>
+<li><p>Huang Z (1998).
+&#8220;Extensions to the k-Means Algorithm for Clustering Large Data Sets with Categorical Values.&#8221;
+<em>Data Min. Knowl. Discov.</em>, <b>2</b>, 283-304.</p></li>
+<li><p>Huang Z (1997).
+&#8220;A Fast Clustering Algorithm to Cluster Very Large Categorical Data Sets in Data Mining.&#8221;
+<em>Proceedings of the SIGMOD Workshop on Research Issues on Data Mining and Knowledge Discovery</em>, <b>28</b>, 1-8.</p></li>
+<li><p>Hartigan JA (1975).
+<em>Clustering Algorithms</em>.
+John Wiley &amp; Sons.</p></li>
+</ul></p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")</span>
-<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/sim.fastq"</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Check on datafile isn't true.</span>
-#&gt; <span class='error'>File does not exist: '../data/sim.fastq'</span></div><div class='input'>
+<span class='no'>datFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"inst/extdata/sim.fastq"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
+<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; Time cost: 1.044265 secs
+#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)
+#&gt; Time cost: 0.484323 secs
+#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)
+#&gt; Time cost: 0.590729 secs
+#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)
+#&gt; Time cost is: 2.119444 secs
+#&gt; Best optimum is: -103562.999033</div><div class='input'>
 <span class='co'># Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)</span>
-<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/sim.fastq"</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-<span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"FASTQ_MACQUEEN"</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Check on datafile isn't true.</span>
-#&gt; <span class='error'>File does not exist: '../data/sim.fastq'</span></div><div class='input'>
+<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+<span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"FASTQ_MACQUEEN"</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Time cost: 0.061015 secs
+#&gt; Log likelihood in 1th initialization: -229887.38 (1 iterations: 3 4401)
+#&gt; Time cost: 0.056687 secs
+#&gt; Log likelihood in 2th initialization: -202943.53 (3 iterations: 2957 4967)
+#&gt; Time cost: 0.063890 secs
+#&gt; Log likelihood in 3th initialization: -198153.01 (1 iterations: 579 2948)
+#&gt; Time cost is: 0.182474 secs
+#&gt; Best optimum is: -198153.011862</div><div class='input'>
 <span class='co'># Clustering an amplicon dataset provide a different seed</span>
-<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/sim.fastq"</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Check on datafile isn't true.</span>
-#&gt; <span class='error'>File does not exist: '../data/sim.fastq'</span></div><div class='input'>
+<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'>khaplotype</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; Time cost: 0.558205 secs
+#&gt; Log likelihood in 1th initialization: -136735.57 (3 iterations: 81 155)
+#&gt; Time cost is: 0.558246 secs
+#&gt; Best optimum is: -136735.565422</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -198,6 +233,8 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

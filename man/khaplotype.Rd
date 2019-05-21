@@ -4,7 +4,7 @@
 \alias{khaplotype}
 \title{Clustering amplicon datasets with quality scores.}
 \usage{
-khaplotype(K = 3, datafile = "../data/sim.fastq")
+khaplotype(K = 3, datafile = "sim.fastq")
 }
 \arguments{
 \item{K}{Number of clusters. Default is 1.}
@@ -51,13 +51,25 @@ Value:
 }
 \examples{
 # Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")
-res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", n_init = 3)
+datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3)
 
 # Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)
-res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", n_init = 3,
+res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3,
 algorithm = "FASTQ_MACQUEEN", shuffle = TRUE)
 
 # Clustering an amplicon dataset provide a different seed
-res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", seed = 1)
+res_khap <- khaplotype(K = 5, datafile = datFile, seed = 1)
 
+}
+\references{
+{
+\itemize{
+    \item \insertRef{Lloyd1982}{CClust}
+    \item \insertRef{MacQueen1967}{CClust}
+    \item \insertRef{Huang1998}{CClust}
+    \item \insertRef{Huang1997}{CClust}
+    \item \insertRef{Hartigan1975}{CClust}
+    }
+}
 }

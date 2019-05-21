@@ -11,12 +11,15 @@ Description: An R package that implement unsupervised clustering on categorical 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 2.10)
-Improts:
+Depends: 
+  R (>= 2.10),
   mclust,
   checkmate,
   ade4,
-  adegenet
+  adegenet,
+  stringr
+Imports: Rdpack (>= 0.7)
+RdMacros: Rdpack
 Suggests: 
     knitr,
     rmarkdown,

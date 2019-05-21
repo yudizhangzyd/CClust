@@ -17,5 +17,6 @@ Read a fastq file and encode Phred quality score from 0 to 93 using ASCII 33 to 
 }
 \examples{
 # Read a fastq file
-dat <- read_fastq(datafile = "../data/sim.fastq")
+datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+dat <- read_fastq(datafile = datFile)
 }

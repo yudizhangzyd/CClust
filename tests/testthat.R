@@ -1,4 +1,4 @@
 library(testthat)
-library(CategoricalCluster)
+library(CClust)
 
-test_check("CategoricalCluster")
+test_check("CClust")

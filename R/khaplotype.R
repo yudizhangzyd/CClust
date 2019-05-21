@@ -3,7 +3,7 @@
 #' @description
 #' Implement three unsupervised clustering algorithms on amplicon datasets with quality scores.
 #'
-#' @usage khaplotype(K = 3, datafile = "../data/sim.fastq")
+#' @usage khaplotype(K = 3, datafile = "sim.fastq")
 #'
 #' @param K Number of clusters. Default is 1.
 #' @param datafile Path to a data file. Has to be a fastq file if want to conduct clustering on amplicon data.
@@ -39,18 +39,30 @@
 #'
 #' @useDynLib CClust r_khaplotype
 #' @importFrom checkmate expect_file_exists expect_string expect_choice
+#' @importFrom Rdpack reprompt
 #' @export khaplotype
+#'
+#' @references {
+#' \itemize{
+#'     \item \insertRef{Lloyd1982}{CClust}
+#'     \item \insertRef{MacQueen1967}{CClust}
+#'     \item \insertRef{Huang1998}{CClust}
+#'     \item \insertRef{Huang1997}{CClust}
+#'     \item \insertRef{Hartigan1975}{CClust}
+#'     }
+#' }
 #'
 #' @examples
 #' # Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")
-#' res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", n_init = 3)
+#' datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+#' res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3)
 #'
 #' # Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)
-#' res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", n_init = 3,
+#' res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3,
 #' algorithm = "FASTQ_MACQUEEN", shuffle = TRUE)
 #'
 #' # Clustering an amplicon dataset provide a different seed
-#' res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", seed = 1)
+#' res_khap <- khaplotype(K = 5, datafile = datFile, seed = 1)
 #'
 
 khaplotype <- function(K = 1,

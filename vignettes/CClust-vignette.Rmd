@@ -6,6 +6,8 @@ output:
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 2
+bibliography:
+  ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -31,7 +33,7 @@ knitr::opts_chunk$set(
 devtools::install_github("yudizhangzyd/CClust")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # Loads the package
 library(CClust)
 ```
@@ -49,12 +51,18 @@ There are two main functions `kmodes` and `khaplotype` coded for clsutering cate
 \vspace{0.25cm}
 
 2. [Clustering](#clustering): The second way to utilize `CClust` is to clustering categorical datasets using the following functions.
-    -[**`khaplotype`**](#khaplotype): Clustering the amplicon datasets with quality scores, only random initialization is avaiable in `khaplotype`.
-    -[**`kmodes`**](#kmodes): Clustering categorical datasets without quality information of the data, different from function `khaplotype`, it has six different random initialization methods.
+
+  -[**`khaplotype`**](#khaplotype): Clustering the amplicon datasets with quality scores, only random initialization is avaiable in `khaplotype`.
+    
+  -[**`kmodes`**](#kmodes): Clustering categorical datasets without quality information of the data, different from function `khaplotype`, it has six different random initialization methods.
     
 \vspace{0.25cm}
 
-3. [Evaluation](#evaluation): Lastly, `CClust` can be employed to evaluate the clustering result by computing the Adjusted Rand Index with the use function `adjustedRandIndex` in package `mclust`. This is done using the function [**`ARI`**](#ARI). And there is a function [**`plot_cluster`**](#plot_cluster) in this package to help people visulize the clustering results.
+3. [Evaluation](#evaluation): Lastly, `CClust` can be employed to evaluate the clustering result by the following functions.
+
+  -[**`ARI`**](#ARI): Computing the Adjusted Rand Index [@Hubert1985] with the use of function `adjustedRandIndex` in package `mclust`.
+  
+  -[**`plot_cluster`**](#plot_cluster): Visulizing the clustering results with the use of function `dapc` in the package `adegenet`.
 
 This vignette is set up to mimic the package structure. The sections after the introduction are dedicated to one of the three package uses. Additional details on the functions are included in these sections along with explanations of how to interpret the output and examples.
 
@@ -62,16 +70,18 @@ This vignette is set up to mimic the package structure. The sections after the i
 
 Since both `kmodes` and `khaplotype` adapted three k-means algorithms (Lloyd's; MacQueen's; Hartigan and Wong's algorithm), a brief review of these three algorithms are included here.
 
-1. Lloyd's algorithm
+1. Lloyd's algorithm [@Lloyd1982]
+
 Lloyd's algorithm prescribes alternating updates of the centers with updates of the cluster assignments. The algorithm is terminated if no obseravtion is transfered after a full circle of observations.
 
-2. MacQueen's algorithm
+2. MacQueen's algorithm [@MacQueen1967]
+
 MacQueen suggested a slight modification on Lloyd's
 algorithm: update the affected centers after every change to the cluster assignments. The algorithm is terminated if no obseravtion is transfered after a full circle of observations.
 
-3. Hartigan and Wong's algorithm
-Hartigan's algorithm improves on Lloyd's and MacQueen's algorithms by only assigning the observation to a new cluster if the objective function is guaranteed to improve. In particular, it takes into account any change in centers that will occur as a result of the move and makes sure that, even with this change, the value of the objective function will still be improved. Hartigan and Wong additionally define a live set to decide when to terminate the algorithm and to avoid unnecessary
-calculations. A cluster is no longer a live set only after a full cycle of the observations is made and none of them moved to or from that cluster.
+3. Hartigan and Wong's algorithm [@Huang1997]
+
+Hartigan's algorithm improves on Lloyd's and MacQueen's algorithms by only assigning the observation to a new cluster if the objective function is guaranteed to improve. In particular, it takes into account any change in centers that will occur as a result of the move and makes sure that, even with this change, the value of the objective function will still be improved. Hartigan and Wong additionally define a live set to decide when to terminate the algorithm and to avoid unnecessary calculations. A cluster is no longer a live set only after a full cycle of the observations is made and none of them moved to or from that cluster.
 
 ## Inilization methods
 
@@ -80,27 +90,32 @@ For function `khaplotype`, only random initialization is implemented, users can 
 For function `kmodes`, except for random initialization, there are 5 more initialization methods.
 
 1. H97_RANDOM
-The first of two initialization schemes proposed by Huang (1997) uses the first K observations as the initial modes. This initialization scheme is randomized in the `R` package `klaR` by selecting K distinct modes at random from the n observations.
+
+The first of two initialization schemes proposed by @Huang1997 uses the first K observations as the initial modes. This initialization scheme is randomized in the `R` package `klaR` by selecting K distinct modes at random from the n observations.
 
 2. HD17
-Huang (1997) mentioned above interpretted by Python author de Vos.
+
+@Huang1997 mentioned above interpretted by Python author de Vos [-@Vos17].
 
 3. CLB09_RANDOM
-A deterministic initialization scheme peoposed by Cao et al (2009).  
+
+A deterministic initialization scheme peoposed by @Cao2009.  
 
 4. K-means++
-The k-means++ initialization scheme for k-means (Arthur and Vassilvitskii,2007) adapted to k-modes.
+
+The k-means++ initialization scheme for k-means @Arthur07 adapted to k-modes.
 
 5. Greedy K-means++
-A greedy version of the algorithm mentioned above (Arthur and Vassilvitskii,2007).
+
+A greedy version of the algorithm mentioned above @Arthur07.
 
 ## Example Data
 
 `CCluster` contains three datasets, which will be used to demonstrate the functions in this vignette. 
 
-1. The `zoo.int.data` dataset is from the UCI Machine Learning Repository (Lichman, 2013). It includes one numeric coordinate, number of legs, which is treated as categorical.
+1. The `zoo.int.data` dataset is from the UCI Machine Learning Repository [@Lichman13]. It includes one numeric coordinate, number of legs, which is treated as categorical.
 
-2. The `sim.fastq` dataset is sampled from a subset of an amplicon dataset mentioned in the paper DADA2 (Callahan et al, 2016). Accordingly, the `assignment.txt` is the true assignment of that simulation data.
+2. The `sim.fastq` dataset is sampled from a subset of an amplicon dataset mentioned in the paper DADA2 [@Benjamin2016]. Accordingly, the `assignment.txt` is the true assignment of that simulation data.
 
 <br>
 
@@ -124,7 +139,8 @@ The code below demonstrates the use of `read_fastq`.
 
 ```{r}
 # Read the sim.fastq file
-dat <- read_fastq(datafile = "../data/sim.fastq")
+datFile <- "../inst/extdata/sim.fastq"
+dat <- read_fastq(datafile = datFile)
 
 # Prints the head of the data
 dat$reads[1:3, 1:10]
@@ -164,15 +180,15 @@ dat$dim
 
 **Output**
 
-- A list of clustering results. The following are returned detials:
-      - `"best_cluster_size"`: Number of observations in each cluster of the best initialization.
-      - `"best_criterion"`: Optimized criterion in each cluster of the best initialization.
-      - `"best_cluster_id"`: Cluster assignment of each observation of the best initialization.
-      - `"best_modes"`: Estimated modes for each cluster of the best initialization.
-      - `"best_seed_index"`: Seed index of the best initialization.
-      - `"total_best_criterion"`: Total optimized criterion of the best initialization.
-      - `"clsuter_size"`: Number of clusters.
-      - `"data_dim"`: Dimension of input data.
+A list of clustering results. The following are returned detials:
+- `"best_cluster_size"`: Number of observations in each cluster of the best initialization.
+- `"best_criterion"`: Optimized criterion in each cluster of the best initialization.
+- `"best_cluster_id"`: Cluster assignment of each observation of the best initialization.
+- `"best_modes"`: Estimated modes for each cluster of the best initialization.
+- `"best_seed_index"`: Seed index of the best initialization.
+- `"total_best_criterion"`: Total optimized criterion of the best initialization.
+- `"clsuter_size"`: Number of clusters.
+- `"data_dim"`: Dimension of input data.
 
 **Functionality**
 
@@ -180,7 +196,8 @@ The code below shows how to use `kmodes` by changing types of algorithms and ini
 
 ```{r}
 # Clustering with three initializations, default algorithm ("KMODES_HUANG") and shuffel the data with choosing K as 5
-res_kmodes <- kmodes(K = 5, datafile = "../data/zoo.int.data", n_init = 3, shuffle = TRUE)
+datFile <- "../inst/extdata/zoo.int.data"
+res_kmodes <- kmodes(K = 5, datafile = datFile, n_init = 3, shuffle = TRUE)
 
 # Number of observations in each cluster
 res_kmodes$best_cluster_size
@@ -188,7 +205,7 @@ res_kmodes$best_cluster_size
 
 ```{r}
 # Clustering with Harigan and Wong and K-means++ greedy adapted initialization method.
-res_kmodes <- kmodes(K = 5, datafile = "../data/zoo.int.data", algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY")
+res_kmodes <- kmodes(K = 5, datafile = datFile, algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY")
 
 # Mode in each cluster
 res_kmodes$best_modes
@@ -215,14 +232,14 @@ res_kmodes$best_modes
 
 **Output**
 
-- A list of clustering results. The following are returned detials:
-      - `"best_cluster_size"`: Number of observations in each cluster of the best initialization.
-      - `"best_criterion"`: Optimized criterion in each cluster of the best initialization.
-      - `"best_cluster_id"`: Cluster assignment of each observation of the best initialization.
-      - `"best_modes"`: Estimated modes for each cluster of the best initialization.
-      - `"total_best_criterion"`: Total optimized criterion of the best initialization.
-      - `"clsuter_size"`: Number of clusters.
-      - `"data_dim"`: Dimension of input data.
+A list of clustering results. The following are returned detials:
+- `"best_cluster_size"`: Number of observations in each cluster of the best initialization.
+- `"best_criterion"`: Optimized criterion in each cluster of the best initialization.
+- `"best_cluster_id"`: Cluster assignment of each observation of the best initialization.
+- `"best_modes"`: Estimated modes for each cluster of the best initialization.
+- `"total_best_criterion"`: Total optimized criterion of the best initialization.
+- `"clsuter_size"`: Number of clusters.
+- `"data_dim"`: Dimension of input data.
       
 **Functionality**
 
@@ -230,7 +247,8 @@ The code below shows how to use `khaplotype` by changing types of algorithms. If
 
 ```{r}
 # Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")
-res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", n_init = 3)
+datFile <- "../inst/extdata/sim.fastq"
+res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3)
 
 # Number of observations in each cluster
 res_khap$best_cluster_size
@@ -241,7 +259,7 @@ res_khap$total_best_criterion
 
 ```{r}
 # Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)
-res_khap <- khaplotype(K = 5, datafile = "../data/sim.fastq", n_init = 3, algorithm = "FASTQ_MACQUEEN", shuffle = TRUE, seed = 1)
+res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3, algorithm = "FASTQ_MACQUEEN", shuffle = TRUE, seed = 1)
 
 # Number of observations in each cluster
 res_khap$best_cluster_size
@@ -272,8 +290,10 @@ The code below shows how to access the clustering results using function `ARI`.
 
 ```{r}
 # Estimate cluster assignments by function `khaplotype`.
-res_khap <- khaplotype (K = 5, datafile = "../data/sim.fastq", n_init = 3)
-true_assignments <- as.numeric(read.table("../data/assignment.txt", header = F, sep = ""))
+datFile <- "../inst/extdata/sim.fastq"
+res_khap <- khaplotype (K = 5, datafile = datFile, n_init = 3)
+ass <- "../inst/extdata/assignment.txt"
+true_assignments <- as.numeric(read.table(ass, header = F, sep = ""))
 
 # Higher ARI means the similar between two partitions, so the clustering reasults is better
 ARI(res_khap, true_assignments)
@@ -285,8 +305,9 @@ The function `plot_cluster` helps to visulize clusters after using the cluster a
 
 **Inputs**
 
-- `dat` Input data.
+- `dat` Input data path.
 - `res` Results returned from `kmodes` or `khaplotype`.
+- `isFastq` Indicate if the input data is in FASTQ format.
 
 **Output**
 
@@ -297,11 +318,24 @@ The code below shows how to plot clusters after running the clustering algorithm
 
 ```{r, eval = FALSE}
 # read the data and use the function `kmodes` with default setting to do the clustering
-data <- read.table("../data/zoo.int.data")
-res_kmodes <- kmodes(K = 5, datafile = "../data/zoo.int.data", algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
+data <- "../inst/extdata/zoo.int.data"
+res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 
 # Plot the clusters
 plot_cluster(data, res_kmodes)
 ```
 
 <img align="center" height="400" src="figs/clusters_kmodes.png">
+
+```{r, eval = FALSE}
+# read the data and use the function `kmodes` with default setting to do the clustering
+data <- "../inst/extdata/sim.fastq"
+res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
+
+# Plot the clusters
+plot_cluster(data, res_khap, isFastq = TRUE)
+```
+
+<img align="center" height="400" src="figs/clusters_khap.png">
+
+# Reference

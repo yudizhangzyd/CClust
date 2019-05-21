@@ -3,7 +3,7 @@
 #' @description
 #' Implement three unsupervised clustering algorithms on categorical datasets.
 #'
-#' @usage kmodes(K = 5, datafile = "../data/zoo.int.data")
+#' @usage kmodes(K = 5, datafile = "zoo.int.data")
 #'
 #' @param K Number of clusters. Default is 1.
 #' @param datafile Path to a data file.
@@ -48,14 +48,26 @@
 #'
 #' @useDynLib CClust r_kmodes
 #' @importFrom checkmate expect_file_exists expect_string expect_choice
+#' @importFrom Rdpack reprompt
 #' @export kmodes
+#'
+#' @references {
+#' \itemize{
+#'     \item \insertRef{Lloyd1982}{CClust}
+#'     \item \insertRef{MacQueen1967}{CClust}
+#'     \item \insertRef{Huang1998}{CClust}
+#'     \item \insertRef{Huang1997}{CClust}
+#'     \item \insertRef{Hartigan1975}{CClust}
+#'     }
+#' }
 #'
 #' @examples
 #' # Clustering with three initializations with default algorithm ("KMODES_HUANG")
-#' res_kmodes <- kmodes(K = 5, datafile = "../data/zoo.int.data", n_init = 3, shuffle = TRUE)
+#' datFile <- system.file("inst/extdata/zoo.int.data", package = "CClust")
+#' res_kmodes <- kmodes(K = 5, datafile = datFile, n_init = 3, shuffle = TRUE)
 #'
 #' # Clustering with Harigan and Wong and K-means++ greedy adapted initialization method.
-#' res_kmodes <- kmodes(K = 5, datafile = "../data/zoo.int.data", algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY")
+#' res_kmodes <- kmodes(K = 5, datafile = datFile, algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY")
 #'
 
 kmodes <- function(K = 1,

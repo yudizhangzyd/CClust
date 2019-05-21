@@ -7,16 +7,25 @@
 #'
 #' @importFrom mclust adjustedRandIndex
 #' @importFrom checkmate expect_class checkClass
+#' @importFrom Rdpack reprompt
 #' @export ARI
+#'
+#' @references {
+#' \itemize{
+#'     \item \insertRef{Hubert1985}{CClust}
+#'     }
+#' }
 #'
 #' @return A numberic value between 0 and 1, which indicates agreement between two partitions.
 #'
 #' @examples
 #' # Estimate cluster assignments by function `khaplotype`.
-#' res_khap <- khaplotype (K = 5, datafile = "../data/sim.fastq", n_init = 3)
-#' true_assignments <- as.numeric(read.table("../data/assignment.txt", header = F, sep = ""))
+#' datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+#' res_khap <- khaplotype (K = 5, datafile = datFile, n_init = 3)
+#' ass <- system.file("inst/extdata/assignment.txt", package = "CClust")
+#' true_assignments <- as.numeric(read.table(ass, header = F, sep = ""))
+#' # Compute the Adjusted Rand Index
 #' ARI(res_khap, true_assignments)
-#'
 
 ARI <- function(est, truth)
 {

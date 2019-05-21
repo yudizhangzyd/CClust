@@ -136,12 +136,29 @@
 
     <p>A numberic value between 0 and 1, which indicates agreement between two partitions.</p>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><ul>
+<li><p>Hubert L, Arabie P (1985).
+&#8220;Comparing partitions.&#8221;
+<em>Journal of Classification</em>, 193--218.</p></li>
+</ul></p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Estimate cluster assignments by function `khaplotype`.</span>
-<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='khaplotype.html'>khaplotype</a></span> (<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/sim.fastq"</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Check on datafile isn't true.</span>
-#&gt; <span class='error'>File does not exist: '../data/sim.fastq'</span></div><div class='input'><span class='no'>true_assignments</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/read.table'>read.table</a></span>(<span class='st'>"../data/assignment.txt"</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>""</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open file '../data/assignment.txt': No such file or directory</span></div><div class='output co'>#&gt; <span class='error'>Error in file(file, "rt"): cannot open the connection</span></div><div class='input'><span class='fu'>ARI</span>(<span class='no'>res_khap</span>, <span class='no'>true_assignments</span>)</div><div class='output co'>#&gt; <span class='error'>Error in checkClass(x, classes, ordered, null.ok): object 'res_khap' not found</span></div><div class='input'>
-</div></pre>
+<span class='no'>datFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"inst/extdata/sim.fastq"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
+<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='khaplotype.html'>khaplotype</a></span> (<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; Time cost: 1.026149 secs
+#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)
+#&gt; Time cost: 0.486196 secs
+#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)
+#&gt; Time cost: 0.587163 secs
+#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)
+#&gt; Time cost is: 2.101410 secs
+#&gt; Best optimum is: -103562.999033</div><div class='input'><span class='no'>ass</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"inst/extdata/assignment.txt"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
+<span class='no'>true_assignments</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/read.table'>read.table</a></span>(<span class='no'>ass</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>""</span>))
+<span class='co'># Compute the Adjusted Rand Index</span>
+<span class='fu'>ARI</span>(<span class='no'>res_khap</span>, <span class='no'>true_assignments</span>)</div><div class='output co'>#&gt; [1] 0.9513036</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -149,6 +166,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

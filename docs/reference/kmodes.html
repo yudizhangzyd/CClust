@@ -117,7 +117,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>kmodes</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/zoo.int.data"</span>)</pre>
+    <pre class="usage"><span class='fu'>kmodes</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"zoo.int.data"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,15 +183,34 @@
 <li><p><code>"data_dim"</code>: Dimension of input data.</p></li>
 </ul>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><ul>
+<li><p>Lloyd S (1982).
+&#8220;Least squares quantization in PCM.&#8221;
+<em>Information Theory, IEEE Transactions on</em>, <b>28</b>(2), 129 - 137.</p></li>
+<li><p>MacQueen J (1967).
+&#8220;Some methods for classification and analysis of multivariate observations.&#8221;
+In Cam LML, Neyman J (eds.), <em>Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability</em>, volume 1, 281-297.</p></li>
+<li><p>Huang Z (1998).
+&#8220;Extensions to the k-Means Algorithm for Clustering Large Data Sets with Categorical Values.&#8221;
+<em>Data Min. Knowl. Discov.</em>, <b>2</b>, 283-304.</p></li>
+<li><p>Huang Z (1997).
+&#8220;A Fast Clustering Algorithm to Cluster Very Large Categorical Data Sets in Data Mining.&#8221;
+<em>Proceedings of the SIGMOD Workshop on Research Issues on Data Mining and Knowledge Discovery</em>, <b>28</b>, 1-8.</p></li>
+<li><p>Hartigan JA (1975).
+<em>Clustering Algorithms</em>.
+John Wiley &amp; Sons.</p></li>
+</ul></p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Clustering with three initializations with default algorithm ("KMODES_HUANG")</span>
-<span class='no'>res_kmodes</span> <span class='kw'>&lt;-</span> <span class='fu'>kmodes</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/zoo.int.data"</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Check on datafile isn't true.</span>
-#&gt; <span class='error'>File does not exist: '../data/zoo.int.data'</span></div><div class='input'>
+<span class='no'>datFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"inst/extdata/zoo.int.data"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
+<span class='no'>res_kmodes</span> <span class='kw'>&lt;-</span> <span class='fu'>kmodes</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
 <span class='co'># Clustering with Harigan and Wong and K-means++ greedy adapted initialization method.</span>
-<span class='no'>res_kmodes</span> <span class='kw'>&lt;-</span> <span class='fu'>kmodes</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='st'>"../data/zoo.int.data"</span>, <span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"KMODES_HARTIGAN_WONG"</span>, <span class='kw'>init_method</span> <span class='kw'>=</span> <span class='st'>"KMODES_INIT_AV07_GREEDY"</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Check on datafile isn't true.</span>
-#&gt; <span class='error'>File does not exist: '../data/zoo.int.data'</span></div><div class='input'>
-</div></pre>
+<span class='no'>res_kmodes</span> <span class='kw'>&lt;-</span> <span class='fu'>kmodes</span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>, <span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"KMODES_HARTIGAN_WONG"</span>, <span class='kw'>init_method</span> <span class='kw'>=</span> <span class='st'>"KMODES_INIT_AV07_GREEDY"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -201,6 +220,8 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
