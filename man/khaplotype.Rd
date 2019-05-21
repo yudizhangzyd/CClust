@@ -18,8 +18,6 @@ khaplotype(K = 3, datafile = "sim.fastq")
 \item{seed}{Random number seed. Default is 1.}
 
 \item{shuffle}{Incidate if shuffle the input order. Default is FALSE.}
-
-\item{sim_info_file}{Path to the true observation assignments file to compute adjusted rand index.}
 }
 \value{
 Returns a list of clustering results.

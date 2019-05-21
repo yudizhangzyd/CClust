@@ -48,13 +48,13 @@ the code, it will asks you to choose the number PCs to retain and choose the num
 Learn More
 ----------
 
-To learn more about `CClust`, read through the [vignette](https://github.com/yudizhangzyd/CClust/blob/master/docs/articles/CClust-vignette.html) for `CClust` which contains:
+To learn more about `CClust`, read through the [vignette](https://yudizhangzyd.github.io/CClust/articles/CClust-vignette.html) for `CClust` which contains:
 
 -   details on the three algorithms
 -   explanations of how to use the functions
 -   interpretations of the clustering asscessment
 
-Additionally, more information is available at the package [website](https://github.com/yudizhangzyd/CClust).
+Additionally, more information is available at the package [website](https://yudizhangzyd.github.io/CClust/index.html).
 
 
 

@@ -10,7 +10,6 @@
 #' @param n_init Number of initializations.
 #' @param algorithm Algorithm to implement clustering. Default is "FASTQ_LLOYDS_EFFICIENT". See details for the options available.
 #' @param seed Random number seed. Default is 1.
-#' @param sim_info_file Path to the true observation assignments file to compute adjusted rand index.
 #' @param shuffle Incidate if shuffle the input order. Default is FALSE.
 #'
 #' @details
