@@ -20,6 +20,16 @@
 #include "io.h"
 #include "math.h"
 
+#ifndef STANDALONE
+#include <Rinternals.h>
+#define PRINTF(str, ...) Rprintf((str), __VA_ARGS__)
+#define EPRINTF(str, ...) REprintf((str), __VA_ARGS__)
+#else
+#define PRINTF(str, ...) fprintf(stdout, (str), __VA_ARGS__)
+#define EPRINTF(str, ...) fprintf(stderr, (str), __VA_ARGS__)
+#endif
+
+
 /**
  * Sample n from N objects without replacemnt.
  *
@@ -798,7 +808,7 @@ int read_hap_data(data *dat, options *opt)
 		pc = c;
 	}
 	
-	fprintf(stderr, "quiet = %d\n", opt->quiet);
+	EPRINTF("quiet = %d\n", opt->quiet);
 	debug_msg(MINIMAL, opt->quiet, "Data %u x %u\n", dat->n_observations,
 		  dat->n_coordinates);
 	

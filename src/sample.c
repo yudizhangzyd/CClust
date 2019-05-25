@@ -5,6 +5,15 @@
 #include "sample.h"
 #include "error.h"
 
+#ifndef STANDALONE
+#include <Rinternals.h>
+#define PRINTF(str, ...) Rprintf((str), __VA_ARGS__)
+#define EPRINTF(str, ...) REprintf((str), __VA_ARGS__)
+#else
+#define PRINTF(str, ...) fprintf(stdout, (str), __VA_ARGS__)
+#define EPRINTF(str, ...) fprintf(stderr, (str), __VA_ARGS__)
+#endif
+
 void sample(unsigned int N, unsigned int n, unsigned int *idx)
 {
 	unsigned int t = 0, m = 0;
@@ -48,7 +57,7 @@ void sample_vitter(unsigned int N, unsigned int n, unsigned int *idx)
 		do {
 			do {
 				X = dN * (-vprime + 1.);
-				fprintf(stderr, "X = %f\n", X);
+				EPRINTF("X = %f\n", X);
 				S = (int) X;
 				if (S < qu1)
 					break;

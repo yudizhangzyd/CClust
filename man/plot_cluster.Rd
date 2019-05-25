@@ -26,13 +26,13 @@ discriminant functions to retain.
 }
 \examples{
 # use function \\code{kmodes}
-data <- system.file("inst/extdata/zoo.int.data", package = "CClust")
+data <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 plot_cluster(data, res_kmodes)
 
 # use function \\code{khaplotype}
-data <- system.file("inst/extdata/sim.fastq", package = "CClust")
+data <- system.file("extdata", "sim.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 plot_cluster(data, res_khap, isFastq = TRUE)
 }

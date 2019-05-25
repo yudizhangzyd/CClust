@@ -6,6 +6,15 @@
 #include "math.h"
 #include "error.h"
 
+#ifndef STANDALONE
+#include <Rinternals.h>
+#define PRINTF(str, ...) Rprintf((str), __VA_ARGS__)
+#define EPRINTF(str, ...) REprintf((str), __VA_ARGS__)
+#else
+#define PRINTF(str, ...) fprintf(stdout, (str), __VA_ARGS__)
+#define EPRINTF(str, ...) fprintf(stderr, (str), __VA_ARGS__)
+#endif
+
 /**
  * XY used penultimate 2 bits to encode 4 nucleotides.
  * IUPAC re-encodes using 4 bits to represent 17 characters, ignoring U as not
@@ -553,14 +562,14 @@ int fread_fastq(FILE *fp, fastq_data **in_fqd, fastq_options *fqo)
 	}
 
 	if (fqd->file_type == FASTQ_FILE) {
-		debug_msg(SILENT, fxn_debug, "Minimum quality score: %c (%d)\n",
+		PRINTF("Minimum quality score: %c (%d)\n",
 			fqd->min_quality, (int) fqd->min_quality);
-		debug_msg(SILENT, fxn_debug, "Maximum quality score: %c (%d)\n",
+		PRINTF("Maximum quality score: %c (%d)\n",
 			fqd->max_quality, (int) fqd->max_quality);
 	}
-	debug_msg(SILENT, fxn_debug, "Minimum read length: %u\n",
+	PRINTF("Minimum read length: %u\n",
 		fqd->n_min_length);
-	debug_msg(SILENT, fxn_debug, "Maximum read length: %u\n",
+	PRINTF("Maximum read length: %u\n",
 		fqd->n_max_length);
 
 	qptr = fqd->quals;

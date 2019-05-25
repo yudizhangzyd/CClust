@@ -4,7 +4,8 @@
 \alias{kmodes}
 \title{Clustering categorical datasets.}
 \usage{
-kmodes(K = 5, datafile = "zoo.int.data")
+kmodes(K = 1, datafile = NULL, n_init = 1, algorithm = "KMODES_HUANG",
+init_method = "KMODES_INIT_RANDOM_SEEDS", seed = 1, shuffle = FALSE)
 }
 \arguments{
 \item{K}{Number of clusters. Default is 1.}
@@ -60,11 +61,12 @@ Value:
 }
 \examples{
 # Clustering with three initializations with default algorithm ("KMODES_HUANG")
-datFile <- system.file("inst/extdata/zoo.int.data", package = "CClust")
+datFile <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = datFile, n_init = 3, shuffle = TRUE)
 
 # Clustering with Harigan and Wong and K-means++ greedy adapted initialization method.
-res_kmodes <- kmodes(K = 5, datafile = datFile, algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY")
+res_kmodes <- kmodes(K = 5, datafile = datFile,
+algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY")
 
 }
 \references{

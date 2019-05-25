@@ -7,19 +7,20 @@
 #' @useDynLib CClust r_read_fastq
 #'
 #' @importFrom checkmate expect_file_exists
+#' @importFrom utils tail
 #' @export read_fastq
 #'
 #' @return Return a list contains reads, quality socres and dim of the data.
 #'
 #' @examples
 #' # Read a fastq file
-#' datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+#' datFile <- system.file("extdata", "sim.fastq", package = "CClust")
 #' dat <- read_fastq(datafile = datFile)
 
 read_fastq <- function(datafile = NULL)
 {
   checkmate::expect_file_exists(datafile, access = "r")
-  if (tail(unlist(strsplit(datafile, "[.]")), 1) != "fastq")
+  if (utils::tail(unlist(strsplit(datafile, "[.]")), 1) != "fastq")
     stop("The input datafile has to be fastq file when setting run_with_quals = TRUE!")
 
   if (!is.loaded("r_read_fastq", PACKAGE = "CClust")) {

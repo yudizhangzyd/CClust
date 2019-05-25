@@ -17,7 +17,8 @@ Depends:
   checkmate,
   ade4,
   adegenet,
-  stringr
+  stringr, 
+  utils
 Imports: Rdpack (>= 0.7)
 RdMacros: Rdpack
 Suggests: 

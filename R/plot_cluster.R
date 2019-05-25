@@ -16,19 +16,20 @@
 #' @importFrom ade4 scatter
 #' @importFrom checkmate expect_class
 #' @importFrom stringr str_split
+#' @importFrom utils tail read.table
 #' @export plot_cluster
 #'
 #' @return  A plot reflecting clustering results.
 #'
 #' @examples
 #' # use function \code{kmodes}
-#' data <- system.file("inst/extdata/zoo.int.data", package = "CClust")
+#' data <- system.file("extdata", "zoo.int.data", package = "CClust")
 #' res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 #' init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 #' plot_cluster(data, res_kmodes)
 #'
 #' # use function \code{khaplotype}
-#' data <- system.file("inst/extdata/sim.fastq", package = "CClust")
+#' data <- system.file("extdata", "sim.fastq", package = "CClust")
 #' res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 #' plot_cluster(data, res_khap, isFastq = TRUE)
 
@@ -37,9 +38,9 @@ plot_cluster <- function(dat, res, isFastq = FALSE) {
   checkmate::expect_class(dat, "character")
 
   if(isFastq == FALSE) {
-    if (tail(unlist(strsplit(dat, "[.]")), 1) != "fastq")
+    if (utils::tail(unlist(strsplit(dat, "[.]")), 1) != "fastq")
       stop ("The input datafile has to be fastq file when isFastq = TRUE.")
-    dat <- read.table(dat)
+    dat <- utils::read.table(dat)
   }
   else {
     if (tail(unlist(strsplit(dat, "[.]")), 1) != "fastq")

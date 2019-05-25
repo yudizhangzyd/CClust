@@ -19,9 +19,9 @@ Compute the adjusted rand index given the estimated assignments and the true ass
 }
 \examples{
 # Estimate cluster assignments by function `khaplotype`.
-datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+datFile <- system.file("extdata", "sim.fastq", package = "CClust")
 res_khap <- khaplotype (K = 5, datafile = datFile, n_init = 3)
-ass <- system.file("inst/extdata/assignment.txt", package = "CClust")
+ass <- system.file("extdata", "assignment.txt", package = "CClust")
 true_assignments <- as.numeric(read.table(ass, header = F, sep = ""))
 # Compute the Adjusted Rand Index
 ARI(res_khap, true_assignments)

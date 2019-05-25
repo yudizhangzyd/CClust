@@ -1610,9 +1610,9 @@ int read_data(data *dat, options *opt)
 		pc = c;
 	}
 
-fprintf(stderr, "quiet = %d\n", opt->quiet);
-	debug_msg(MINIMAL, opt->quiet, "Data %u x %u\n", dat->n_observations,
-		dat->n_coordinates);
+//fprintf(stderr, "quiet = %d\n", opt->quiet);
+//	debug_msg(MINIMAL, opt->quiet, "Data %u x %u\n", dat->n_observations,
+//		dat->n_coordinates);
 
 	if (opt->true_column < dat->n_coordinates) {
 		--dat->n_coordinates;
@@ -2332,7 +2332,7 @@ fprintf(stderr, "Found %u seeds\n", opt->n_seed_set);
 				n_identical++;
 		}
 		if (n_identical > dat->n_observations - 7)
-			fprintf(stderr, "Read %u identical to %u (of %u [%u]) others\n", i, n_identical, dat->n_observations, dat->n_observations - 7);
+			PRINTF(stderr, "Read %u identical to %u (of %u [%u]) others\n", i, n_identical, dat->n_observations, dat->n_observations - 7);
 	}
 	exit(0);
 	*/
@@ -2698,7 +2698,7 @@ int estimate_k(data *dat, options *opt)
 			debug_msg(DEBUG_I, fxn_debug, "Observation %u assigned to %u\n", i, j);
 			obsn_hd[i] = hd(dat->dmat[i], dat->best_modes[j],
 				dat->n_coordinates);
-			//fprintf(stderr, "Observation %u in cluster %u/%u, distance %.0f\n", i, j, opt->K, obsn_hd[i]);
+			//PRINTF(stderr, "Observation %u in cluster %u/%u, distance %.0f\n", i, j, opt->K, obsn_hd[i]);
 
 			/* allocate observations equally to equidistant modes */
 			obsn_cnt[i][j] = 1;
@@ -2932,7 +2932,7 @@ if (isnan(crit[j])) {
 			*rrsd += var[j] / size[j];
 			*sd += var[j] * size[j];
 		}
-		//fprintf(stderr, "%f %f (%f)\n", *rrcost, *rrsd, size[j]);
+		//PRINTF(stderr, "%f %f (%f)\n", *rrcost, *rrsd, size[j]);
 	}
 	*krcost = *rrcost * n / K;
 	*rrcost *= K / sum;
@@ -2943,7 +2943,7 @@ if (isnan(crit[j])) {
 		*rrsd = K * sqrt(*rrsd) / sum;
 	}
 /*
-	fprintf(stderr, "w[%u] = %.0f (%.1f); rrw[%u] = %.3f (%.3f); krw[%u] = %.3f (%.3f)\n",
+	PRINTF(stderr, "w[%u] = %.0f (%.1f); rrw[%u] = %.3f (%.3f); krw[%u] = %.3f (%.3f)\n",
 		K, *cost, sqrt(*sd), K, *rrcost, *rrsd, K, *krcost, *krsd);
 */
 } /* compute_costs */
@@ -2963,7 +2963,7 @@ void compute_jump_stats(double cost, double rrcost, double krcost,
 	*jump = pow(cost/factor, -Y) - (pcost > 0 ? pow(pcost/factor, -Y) : 0);
 	*rjump = pow(rrcost/rfactor, -Y) - (prrcost > 0 ? pow(prrcost/rfactor, -Y) : 0);
 	*kjump = pow(krcost/kfactor, -Y) - (pkrcost > 0 ? pow(pkrcost/kfactor, -Y) : 0);
-	/*fprintf(stderr, "j = %0.3f; rj = %6.3f; kj = %6.3f\n", *jump, *rjump, *kjump);*/
+	/*PRINTF(stderr, "j = %0.3f; rj = %6.3f; kj = %6.3f\n", *jump, *rjump, *kjump);*/
 
 } /* compute_jump_stats */
 
@@ -3000,54 +3000,54 @@ void free_data(data *dat) {
 //	if (cmdname[start] == '/') start++;
 //
 //	for (size_t i = start; i < strlen(cmdname); ++i) fputc(toupper(cmdname[i]), fp);
-//	fprintf(fp, "(%d)\n", 1);
-//	fprintf(fp, "\nNAME\n\t%s - cluster observations with categorical predictors\n", &cmdname[start]);
-//	fprintf(fp, "\nSYNOPSIS\n\t%s [-r <rulong> -n <nuint> -h97|-l|-w -i <istr>|<iuint1...k> -p <pfile> -o <ofile>] -k <kuint> -f <ffile> ...\n", &cmdname[start]);
-//	fprintf(fp, "\nDESCRIPTION\n\t%s clusters observations found in file <ffile> into <kuint> clusters.  It randomly initialize <iuint> times after setting random number seed <sulong>.\n", &cmdname[start]);
-//	fprintf(fp, "\nOPTIONS\n");
-//	fprintf(fp, "\t-c <cint>\n\t\tSet the column containing the truth.\n");
-//	fprintf(fp, "\t--cont\n\t\tContinue previous run.\n");
-//	fprintf(fp, "\t-k <kuint>\n\t\tSet the desired number of clusters K.\n");
-//	fprintf(fp, "\t-k<kuint> <kstr1> <kstr2> ...\n\t\tThe names of output files for K=<kuint>, limited by POSIX ARG_MAX.\n");
-//	fprintf(fp, "\t-j\n\t\tEstimate K from multiple -k<kuint1> ... -k<kuint2> ... arguments.\n");
-//	fprintf(fp, "\t-l\n\t\tRun Lloyd's algorithm (cannot combine with -u).\n");
-//	fprintf(fp, "\t-h97\n\t\tRun Huang's algorithm (combine with -u to replicate klaR).\n");
-//	fprintf(fp, "\t-w\n\t\tRun Hartigan and Wong algorithm (can combine with -u).\n");
-//	fprintf(fp, "\t-1\n\t\tSubtract 1 from the observation categories.\n");
-//	fprintf(fp, "\t-f <ffile> [<ffile2>]\n\t\tSet the input filename (with -s, simulate data are written to this file).\n");
-//	fprintf(fp, "\t\tIf <ffile2> specified, then write the data to this file: same as <ffile> to overwrite.\n");
-//	fprintf(fp, "\t-o <ofile> [<ofile2>]\n\t\tSet the output filename.  If second argument given, split information into first.\n");
-//	fprintf(fp, "\t-i <istr>\n\t\tSet initialization method (rnd|h97|h97rnd|hd17|clb09|clb09rnd|av07|av07grd|rndp|rnds).\n");
-//	fprintf(fp, "\t   <suint1> ... <suintk>\n\t\tSet the indices of the seeds.\n");
-//	fprintf(fp, "\t   <ifile>\n\t\tProvide file with possible seeds.\n");
-//	fprintf(fp, "\t\tIf there are more than <kuint> seeds in <ifile>, then method is 'rnds'.\n");
-//	fprintf(fp, "\t\tIf there are <kuint> seeds in <ifile>, then deterministic initialization with these seeds.\n");
-//	fprintf(fp, "\t\t'rndp' randomly selects seeds from given partitions (use with -c option).\n");
-//	fprintf(fp, "\t\t'rnds' randomly selects seeds from given seed set (repeat -i to provide <ifile> or just use -i <ifile> or -m <mfile>).\n");
-//	fprintf(fp, "\t-n <nuint>\n\t\tSet the desired number of initializations [OPTIONAL; DEFAULT: %u].\n", opt->n_init);
-//	fprintf(fp, "\t-pi <pflt1> ... <pfltk>\n\t\tThe cluster proportions in simulation or:\n");
-//	fprintf(fp, "\t-pi dir <pflt1> ... <pfltk>\n\t\tThe alpha for Dirichlet prior on pi.\n");
-//	fprintf(fp, "\t-p <pdbl>\n\t\tEffective number of independent coordinates, use with -k<kuint> ... arguments.\n");
-//	fprintf(fp, "\t-p <pfile>\n\t\tPartition file for initialization (overrides -i).\n");
-//	fprintf(fp, "\t-r <rulong>\n\t\tSet random number seed. [OPTIONAL]\n");
-//	fprintf(fp, "\t--run <ruint>\n\t\tNumber of inner initializations.\n");
-//	fprintf(fp, "\t-m <mdbl>|<mfile> [<mfile2>]\n\t\tTarget minimum or mode file.\n");
-//	fprintf(fp, "\t\tIf <mfile2> specified with <mfile>, then write modified mode information to file <mfile2>.\n");
-//	fprintf(fp, "\t--shuffle\n\t\tShuffle the data input order on each initialization.\n");
-//	fprintf(fp, "\t-s <sn> <sp> <sc> <st1> <st2>\n\t\tSimulation size (observations by coordinates by categories) and times.\n");
-//	fprintf(fp, "\t\t<st1> is the time separating the centers.\n");
-//	fprintf(fp, "\t\t<st2> is the time separating the observations from their centers.\n");
-//	fprintf(fp, "\t-t <tsec>\n\t\tNumber of seconds to run initializations.\n");
-//	fprintf(fp, "\t-u\n\t\tUse mode updates (combine with -m to replicate klaR).\n");
+//	PRINTF(fp, "(%d)\n", 1);
+//	PRINTF(fp, "\nNAME\n\t%s - cluster observations with categorical predictors\n", &cmdname[start]);
+//	PRINTF(fp, "\nSYNOPSIS\n\t%s [-r <rulong> -n <nuint> -h97|-l|-w -i <istr>|<iuint1...k> -p <pfile> -o <ofile>] -k <kuint> -f <ffile> ...\n", &cmdname[start]);
+//	PRINTF(fp, "\nDESCRIPTION\n\t%s clusters observations found in file <ffile> into <kuint> clusters.  It randomly initialize <iuint> times after setting random number seed <sulong>.\n", &cmdname[start]);
+//	PRINTF(fp, "\nOPTIONS\n");
+//	PRINTF(fp, "\t-c <cint>\n\t\tSet the column containing the truth.\n");
+//	PRINTF(fp, "\t--cont\n\t\tContinue previous run.\n");
+//	PRINTF(fp, "\t-k <kuint>\n\t\tSet the desired number of clusters K.\n");
+//	PRINTF(fp, "\t-k<kuint> <kstr1> <kstr2> ...\n\t\tThe names of output files for K=<kuint>, limited by POSIX ARG_MAX.\n");
+//	PRINTF(fp, "\t-j\n\t\tEstimate K from multiple -k<kuint1> ... -k<kuint2> ... arguments.\n");
+//	PRINTF(fp, "\t-l\n\t\tRun Lloyd's algorithm (cannot combine with -u).\n");
+//	PRINTF(fp, "\t-h97\n\t\tRun Huang's algorithm (combine with -u to replicate klaR).\n");
+//	PRINTF(fp, "\t-w\n\t\tRun Hartigan and Wong algorithm (can combine with -u).\n");
+//	PRINTF(fp, "\t-1\n\t\tSubtract 1 from the observation categories.\n");
+//	PRINTF(fp, "\t-f <ffile> [<ffile2>]\n\t\tSet the input filename (with -s, simulate data are written to this file).\n");
+//	PRINTF(fp, "\t\tIf <ffile2> specified, then write the data to this file: same as <ffile> to overwrite.\n");
+//	PRINTF(fp, "\t-o <ofile> [<ofile2>]\n\t\tSet the output filename.  If second argument given, split information into first.\n");
+//	PRINTF(fp, "\t-i <istr>\n\t\tSet initialization method (rnd|h97|h97rnd|hd17|clb09|clb09rnd|av07|av07grd|rndp|rnds).\n");
+//	PRINTF(fp, "\t   <suint1> ... <suintk>\n\t\tSet the indices of the seeds.\n");
+//	PRINTF(fp, "\t   <ifile>\n\t\tProvide file with possible seeds.\n");
+//	PRINTF(fp, "\t\tIf there are more than <kuint> seeds in <ifile>, then method is 'rnds'.\n");
+//	PRINTF(fp, "\t\tIf there are <kuint> seeds in <ifile>, then deterministic initialization with these seeds.\n");
+//	PRINTF(fp, "\t\t'rndp' randomly selects seeds from given partitions (use with -c option).\n");
+//	PRINTF(fp, "\t\t'rnds' randomly selects seeds from given seed set (repeat -i to provide <ifile> or just use -i <ifile> or -m <mfile>).\n");
+//	PRINTF(fp, "\t-n <nuint>\n\t\tSet the desired number of initializations [OPTIONAL; DEFAULT: %u].\n", opt->n_init);
+//	PRINTF(fp, "\t-pi <pflt1> ... <pfltk>\n\t\tThe cluster proportions in simulation or:\n");
+//	PRINTF(fp, "\t-pi dir <pflt1> ... <pfltk>\n\t\tThe alpha for Dirichlet prior on pi.\n");
+//	PRINTF(fp, "\t-p <pdbl>\n\t\tEffective number of independent coordinates, use with -k<kuint> ... arguments.\n");
+//	PRINTF(fp, "\t-p <pfile>\n\t\tPartition file for initialization (overrides -i).\n");
+//	PRINTF(fp, "\t-r <rulong>\n\t\tSet random number seed. [OPTIONAL]\n");
+//	PRINTF(fp, "\t--run <ruint>\n\t\tNumber of inner initializations.\n");
+//	PRINTF(fp, "\t-m <mdbl>|<mfile> [<mfile2>]\n\t\tTarget minimum or mode file.\n");
+//	PRINTF(fp, "\t\tIf <mfile2> specified with <mfile>, then write modified mode information to file <mfile2>.\n");
+//	PRINTF(fp, "\t--shuffle\n\t\tShuffle the data input order on each initialization.\n");
+//	PRINTF(fp, "\t-s <sn> <sp> <sc> <st1> <st2>\n\t\tSimulation size (observations by coordinates by categories) and times.\n");
+//	PRINTF(fp, "\t\t<st1> is the time separating the centers.\n");
+//	PRINTF(fp, "\t\t<st2> is the time separating the observations from their centers.\n");
+//	PRINTF(fp, "\t-t <tsec>\n\t\tNumber of seconds to run initializations.\n");
+//	PRINTF(fp, "\t-u\n\t\tUse mode updates (combine with -m to replicate klaR).\n");
 //#ifndef __KMODES_NO_QTRANS__
-//	fprintf(fp, "\t-qt\n\t\tTurn off Hartigan & Wong quick-transfer stage.\n");
+//	PRINTF(fp, "\t-qt\n\t\tTurn off Hartigan & Wong quick-transfer stage.\n");
 //#endif
-//	fprintf(fp, "\t-q\n\t\tQuiet\n");
-//	fprintf(fp, "\t-h\n\t\tThis help.\n");
-//	fprintf(fp, "\nUse <ofile2> (-o) and <mfile2> (-m) to convert from format output by fqmorph to run_kmodes format, where categories use contiguous categories 0, 1, 2, ..., without skipping.\n");
-//	fprintf(fp, "\n");
+//	PRINTF(fp, "\t-q\n\t\tQuiet\n");
+//	PRINTF(fp, "\t-h\n\t\tThis help.\n");
+//	PRINTF(fp, "\nUse <ofile2> (-o) and <mfile2> (-m) to convert from format output by fqmorph to run_kmodes format, where categories use contiguous categories 0, 1, 2, ..., without skipping.\n");
+//	PRINTF(fp, "\n");
 //	for (size_t i = start; i < strlen(cmdname); ++i) fputc(toupper(cmdname[i]), fp);
-//	fprintf(fp, "(%d)\n", 1);
+//	PRINTF(fp, "(%d)\n", 1);
 //} /* fprint_usage */
 
 

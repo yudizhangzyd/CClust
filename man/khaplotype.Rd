@@ -4,7 +4,8 @@
 \alias{khaplotype}
 \title{Clustering amplicon datasets with quality scores.}
 \usage{
-khaplotype(K = 3, datafile = "sim.fastq")
+khaplotype(K = 1, datafile = NULL, n_init = 1, algorithm = "FASTQ_HW_EFFICIENT",
+seed = 0, shuffle = FALSE)
 }
 \arguments{
 \item{K}{Number of clusters. Default is 1.}
@@ -48,11 +49,13 @@ Value:
 }
 }
 \examples{
-# Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")
-datFile <- system.file("inst/extdata/sim.fastq", package = "CClust")
+# Clustering an amplicon dataset and run three initializations with default
+# algorithm ("FASTQ_HW_EFFICIENT")
+datFile <- system.file("extdata", "sim.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3)
 
-# Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)
+# Clustering an amplicon dataset and run three initializations with
+# MacQueen's algorithm (shuffle the data)
 res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3,
 algorithm = "FASTQ_MACQUEEN", shuffle = TRUE)
 
