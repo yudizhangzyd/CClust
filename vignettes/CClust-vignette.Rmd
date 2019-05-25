@@ -83,7 +83,7 @@ algorithm: update the affected centers after every change to the cluster assignm
 
 Hartigan's algorithm improves on Lloyd's and MacQueen's algorithms by only assigning the observation to a new cluster if the objective function is guaranteed to improve. In particular, it takes into account any change in centers that will occur as a result of the move and makes sure that, even with this change, the value of the objective function will still be improved. Hartigan and Wong additionally define a live set to decide when to terminate the algorithm and to avoid unnecessary calculations. A cluster is no longer a live set only after a full cycle of the observations is made and none of them moved to or from that cluster.
 
-## Inilization methods
+## Initialization methods
 
 For function `khaplotype`, only random initialization is implemented, users can set different seed.
 
@@ -139,7 +139,7 @@ The code below demonstrates the use of `read_fastq`.
 
 ```{r}
 # Read the sim.fastq file
-datFile <- "../inst/extdata/sim.fastq"
+datFile <- system.file("extdata", "sim.fastq", package = "CClust")
 dat <- read_fastq(datafile = datFile)
 
 # Prints the head of the data
@@ -196,7 +196,7 @@ The code below shows how to use `kmodes` by changing types of algorithms and ini
 
 ```{r}
 # Clustering with three initializations, default algorithm ("KMODES_HUANG") and shuffel the data with choosing K as 5
-datFile <- "../inst/extdata/zoo.int.data"
+datFile <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = datFile, n_init = 3, shuffle = TRUE)
 
 # Number of observations in each cluster
@@ -247,7 +247,7 @@ The code below shows how to use `khaplotype` by changing types of algorithms. If
 
 ```{r}
 # Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")
-datFile <- "../inst/extdata/sim.fastq"
+datFile <- system.file("extdata", "sim.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = datFile, n_init = 3)
 
 # Number of observations in each cluster
@@ -290,9 +290,9 @@ The code below shows how to access the clustering results using function `ARI`.
 
 ```{r}
 # Estimate cluster assignments by function `khaplotype`.
-datFile <- "../inst/extdata/sim.fastq"
+datFile <- system.file("extdata", "sim.fastq", package = "CClust")
 res_khap <- khaplotype (K = 5, datafile = datFile, n_init = 3)
-ass <- "../inst/extdata/assignment.txt"
+ass <- system.file("extdata", "assignment.txt", package = "CClust")
 true_assignments <- as.numeric(read.table(ass, header = F, sep = ""))
 
 # Higher ARI means the similar between two partitions, so the clustering reasults is better
@@ -318,7 +318,7 @@ The code below shows how to plot clusters after running the clustering algorithm
 
 ```{r, eval = FALSE}
 # read the data and use the function `kmodes` with default setting to do the clustering
-data <- "../inst/extdata/zoo.int.data"
+data <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 
 # Plot the clusters
@@ -329,7 +329,7 @@ plot_cluster(data, res_kmodes)
 
 ```{r, eval = FALSE}
 # read the data and use the function `kmodes` with default setting to do the clustering
-data <- "../inst/extdata/sim.fastq"
+data <- system.file("extdata", "sim.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 
 # Plot the clusters
