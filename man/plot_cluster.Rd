@@ -4,14 +4,12 @@
 \alias{plot_cluster}
 \title{Plotting clusters after using \code{kmodes} or \code{khaplotype} function.}
 \usage{
-plot_cluster(dat, res, isFastq = FALSE)
+plot_cluster(res, isGene = FALSE)
 }
 \arguments{
-\item{dat}{Input data path.}
-
 \item{res}{Results returned from \code{kmodes} or \code{khaplotype}.}
 
-\item{isFastq}{Indicate if the input data is in fastq format, if TRUE,}
+\item{isGene}{Indicate if the clustering data is gene sequences, default if FALSE.}
 }
 \value{
 A plot reflecting clustering results.
@@ -29,10 +27,10 @@ discriminant functions to retain.
 data <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
-plot_cluster(data, res_kmodes)
+plot_cluster(res_kmodes)
 
 # use function \\code{khaplotype}
-data <- system.file("extdata", "sim.fastq", package = "CClust")
+data <- system.file("extdata", "sim_small.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
-plot_cluster(data, res_khap, isFastq = TRUE)
+plot_cluster(res_khap, isGene = TRUE)
 }

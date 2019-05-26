@@ -57,6 +57,7 @@ Value:
    \item \code{"total_best_criterion"}: Total optimized criterion of the best initialization.
    \item \code{"clsuter_size"}: Number of clusters.
    \item \code{"data_dim"}: Dimension of input data.
+   \item \code{"data"}: The input data.
 }
 }
 \examples{

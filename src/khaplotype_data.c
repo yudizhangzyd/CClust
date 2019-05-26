@@ -1017,11 +1017,13 @@ int make_res(outres **out, data *dat, options *opt) {
 	(*out)->best_cluster_id = NULL;
 	(*out)->best_cluster_size = NULL;
 	(*out)->best_modes = NULL;
+	(*out)->data = NULL;
 	
 	MAKE_1ARRAY((*out)->best_criterion, opt->K);
 	MAKE_1ARRAY((*out)->best_cluster_size, opt->K);
 	MAKE_1ARRAY((*out)->best_cluster_id, dat->n_observations);
 	MAKE_1ARRAY((*out)->best_modes, opt->K * dat->n_coordinates);
+	MAKE_1ARRAY((*out)->data, dat->n_observations * dat->n_coordinates);
 	
 	(*out)->n_coordinates = dat->n_coordinates;
 	(*out)->n_observations = dat->n_observations;
@@ -1029,6 +1031,8 @@ int make_res(outres **out, data *dat, options *opt) {
 	COPY_1ARRAY((*out)->best_criterion, dat->best_criterion, opt->K);
 	COPY_1ARRAY((*out)->best_cluster_size, dat->best_cluster_size, opt->K);
 	COPY_1ARRAY((*out)->best_cluster_id, dat->best_cluster_id, dat->n_observations);
+	for (unsigned int i = 0; i < dat->n_observations * dat->n_coordinates; ++i)
+		(*out)->data[i] = dat->fdata->reads[i];
 	for (unsigned int i = 0; i < opt->K; ++i)
 		for (unsigned int j = 0; j < dat->n_coordinates; ++j)
 			(*out)->best_modes[i * dat->n_coordinates + j] = dat->best_modes[i][j];
@@ -1042,4 +1046,5 @@ void free_res(outres *out)
 	if (out->best_criterion) free(out->best_criterion);
 	if (out->best_cluster_size) free(out->best_cluster_size);
 	if (out->best_modes) free(out->best_modes);
+	if (out->data) free(out->data);
 }

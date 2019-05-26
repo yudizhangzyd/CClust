@@ -146,7 +146,7 @@ struct _outres {
 	double *best_criterion;		/*<! criterion */
 	unsigned int *best_cluster_id;	/*<! cluster assignments */
 	unsigned int *best_cluster_size;/*<! cluster sizes */
-	
+	unsigned int *data;
 };
 
 int make_hap_data(data **data);

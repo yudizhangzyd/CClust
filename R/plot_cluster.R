@@ -8,15 +8,13 @@
 #' the code, it will asks you to choose the number PCs to retain and choose the number
 #' discriminant functions to retain.
 #'
-#' @param dat Input data path.
 #' @param res Results returned from \code{kmodes} or \code{khaplotype}.
-#' @param isFastq Indicate if the input data is in fastq format, if TRUE,
+#' @param isGene Indicate if the clustering data is gene sequences, default if FALSE.
 #'
 #' @importFrom adegenet dapc
 #' @importFrom ade4 scatter
 #' @importFrom checkmate expect_class
 #' @importFrom stringr str_split
-#' @importFrom utils tail read.table
 #' @export plot_cluster
 #'
 #' @return  A plot reflecting clustering results.
@@ -26,29 +24,25 @@
 #' data <- system.file("extdata", "zoo.int.data", package = "CClust")
 #' res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 #' init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
-#' plot_cluster(data, res_kmodes)
+#' plot_cluster(res_kmodes)
 #'
 #' # use function \code{khaplotype}
-#' data <- system.file("extdata", "sim.fastq", package = "CClust")
+#' data <- system.file("extdata", "sim_small.fastq", package = "CClust")
 #' res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
-#' plot_cluster(data, res_khap, isFastq = TRUE)
+#' plot_cluster(res_khap, isGene = TRUE)
 
-plot_cluster <- function(dat, res, isFastq = FALSE) {
+plot_cluster <- function(res, isGene = FALSE) {
   checkmate::expect_class(res, "list")
-  checkmate::expect_class(dat, "character")
 
-  if(isFastq == FALSE) {
-    if (utils::tail(unlist(strsplit(dat, "[.]")), 1) != "fastq")
-      stop ("The input datafile has to be fastq file when isFastq = TRUE.")
-    dat <- utils::read.table(dat)
+  if(isGene == FALSE) {
+    dat <- res$data
   }
   else {
-    if (tail(unlist(strsplit(dat, "[.]")), 1) != "fastq")
-      stop ("The input datafile has to be fastq file.")
-    data <- read_fastq(dat)
-    reads <- data$reads
-    dat <- matrix(0, nrow = data$dim[1], ncol = 4 * data$dim[2])
-    for (i in 1:data$dim[1]) {
+    if (is.null(res$best_seed_idx) == FALSE)
+      stop ("The clustering data has to be gene sequences.")
+    reads <- res$data
+    dat <- matrix(0, nrow = res$data_dim[1], ncol = 4 * res$data_dim[2])
+    for (i in 1:res$data_dim[1]) {
       reads[i, ][reads[i, ] == "A"] = c('1000')
       reads[i, ][reads[i, ] == "C"] = c('0100')
       reads[i, ][reads[i, ] == "G"] = c('0010')

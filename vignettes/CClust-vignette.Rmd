@@ -189,6 +189,7 @@ A list of clustering results. The following are returned detials:
 - `"total_best_criterion"`: Total optimized criterion of the best initialization.
 - `"clsuter_size"`: Number of clusters.
 - `"data_dim"`: Dimension of input data.
+- `"data"`: The input data.
 
 **Functionality**
 
@@ -240,6 +241,7 @@ A list of clustering results. The following are returned detials:
 - `"total_best_criterion"`: Total optimized criterion of the best initialization.
 - `"clsuter_size"`: Number of clusters.
 - `"data_dim"`: Dimension of input data.
+- `"data"`: Reads of the input data.
       
 **Functionality**
 
@@ -305,9 +307,8 @@ The function `plot_cluster` helps to visulize clusters after using the cluster a
 
 **Inputs**
 
-- `dat` Input data path.
 - `res` Results returned from `kmodes` or `khaplotype`.
-- `isFastq` Indicate if the input data is in FASTQ format.
+- `isGene` Indicate if the clustering data is gene sequence.
 
 **Output**
 
@@ -322,20 +323,20 @@ data <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG", init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 
 # Plot the clusters
-plot_cluster(data, res_kmodes)
+plot_cluster(res_kmodes)
 ```
 
-<img align="center" height="400" src="figs/clusters_kmodes.png">
+<img align="center" height="400" src="figs/kmodes.png">
 
 ```{r, eval = FALSE}
 # read the data and use the function `kmodes` with default setting to do the clustering
-data <- system.file("extdata", "sim.fastq", package = "CClust")
+data <- system.file("extdata", "sim_small.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 
 # Plot the clusters
-plot_cluster(data, res_khap, isFastq = TRUE)
+plot_cluster(res_khap, isGene = TRUE)
 ```
 
-<img align="center" height="400" src="figs/clusters_khap.png">
+<img align="center" height="400" src="figs/khap.png">
 
 # Reference

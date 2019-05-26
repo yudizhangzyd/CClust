@@ -130,12 +130,16 @@ SEXP r_kmodes(SEXP K_r,
 	SEXP r_best_criterion = PROTECT(allocVector(REALSXP, opt->K));
 	memcpy(REAL(r_best_criterion), out->best_criterion, opt->K * sizeof *out->best_criterion);
 	
-	PROTECT(r_list = allocVector(VECSXP, 5));
+	SEXP r_data = PROTECT(allocVector(INTSXP, out->n_observations * out->n_coordinates));
+	memcpy(INTEGER(r_data), out->data, out->n_coordinates * out->n_observations * sizeof *out->data);
+	
+	PROTECT(r_list = allocVector(VECSXP, 6));
 	SET_VECTOR_ELT(r_list, 0, r_best_cluster_size);
 	SET_VECTOR_ELT(r_list, 1, r_best_seed_idx);
 	SET_VECTOR_ELT(r_list, 2, r_best_criterion);
 	SET_VECTOR_ELT(r_list, 3, r_best_cluster_id);
 	SET_VECTOR_ELT(r_list, 4, r_best_modes);
+	SET_VECTOR_ELT(r_list, 5, r_data);
 	
 	if (opt)
 		free_options(opt);
@@ -143,7 +147,7 @@ SEXP r_kmodes(SEXP K_r,
 		free_results(out);
 	
 	PutRNGstate();
-	UNPROTECT(6);
+	UNPROTECT(7);
 	return r_list;
 }
 #endif
@@ -3071,12 +3075,14 @@ int make_results(outres **out, data *dat, options *opt) {
 	(*out)->best_cluster_size = NULL;
 	(*out)->best_modes = NULL;
 	(*out)->best_seed_idx = NULL;
+	(*out)->data = NULL;
 	
 	MAKE_1ARRAY((*out)->best_criterion, opt->K);
 	MAKE_1ARRAY((*out)->best_cluster_size, opt->K);
 	MAKE_1ARRAY((*out)->best_cluster_id, dat->n_observations);
 	MAKE_1ARRAY((*out)->best_modes, opt->K * dat->n_coordinates);
 	MAKE_1ARRAY((*out)->best_seed_idx, opt->K);
+	MAKE_1ARRAY((*out)->data, dat->n_observations * dat->n_coordinates);
 	
 	(*out)->n_coordinates = dat->n_coordinates;
 	(*out)->n_observations = dat->n_observations;
@@ -3085,6 +3091,8 @@ int make_results(outres **out, data *dat, options *opt) {
 	COPY_1ARRAY((*out)->best_cluster_size, dat->best_cluster_size, opt->K);
 	COPY_1ARRAY((*out)->best_cluster_id, dat->best_cluster_id, dat->n_observations);
 	COPY_1ARRAY((*out)->best_seed_idx, dat->best_seed_idx, opt->K);
+	for (unsigned int i = 0; i < dat->n_observations * dat->n_coordinates; ++i)
+		(*out)->data[i] = dat->data[i];
 	for (unsigned int i = 0; i < opt->K; ++i)
 		for (unsigned int j = 0; j < dat->n_coordinates; ++j)
 			(*out)->best_modes[i * dat->n_coordinates + j] = dat->best_modes[i][j];
@@ -3099,4 +3107,5 @@ void free_results(outres *out)
 	if (out->best_cluster_size) free(out->best_cluster_size);
 	if (out->best_modes) free(out->best_modes);
 	if (out->best_seed_idx) free(out->best_seed_idx);
+	if (out->data) free(out->data);
 }

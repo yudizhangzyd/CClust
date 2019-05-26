@@ -35,6 +35,7 @@
 #'    \item \code{"total_best_criterion"}: Total optimized criterion of the best initialization.
 #'    \item \code{"clsuter_size"}: Number of clusters.
 #'    \item \code{"data_dim"}: Dimension of input data.
+#'    \item \code{"data"}: Reads of the input data.
 #' }
 #'
 #' @useDynLib CClust r_khaplotype
@@ -119,9 +120,11 @@ khaplotype <- function(K = 1,
   res <- .Call("r_khaplotype", K, datafile, n_init, algorithm,
                 seed, shuffle, run_with_quals)
   res[[4]] <- matrix(res[[4]], nrow = K, byrow = TRUE)
+  res[[5]] <- matrix(res[[5]], nrow = length(res[[3]]), byrow = TRUE)
 
   names(res) <- c("best_cluster_size", "best_criterion",
-                  "best_cluster_id", "best_modes")
+                  "best_cluster_id", "best_modes", "data")
+
   res$total_best_criterion <- sum(res$best_criterion)
   res$cluster_size <- K
   res$data_dim <- c(length(res[[3]]), dim(res[[4]])[2])

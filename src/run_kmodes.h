@@ -156,6 +156,7 @@ struct _outres {
 	unsigned int *best_cluster_id;	/*<! cluster assignments */
 	unsigned int *best_cluster_size;/*<! cluster sizes */
 	unsigned int *best_seed_idx;	/*<! seeding */
+	unsigned int *data;
 };
 
 #endif

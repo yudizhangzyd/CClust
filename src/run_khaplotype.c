@@ -112,22 +112,25 @@ SEXP r_khaplotype (SEXP K_r,
 	
 	SEXP r_best_modes = PROTECT(allocVector(INTSXP, opt->K * out->n_coordinates));
 	memcpy(INTEGER(r_best_modes), out->best_modes, out->n_coordinates * opt->K * sizeof *out->best_modes);
+	
+	SEXP r_data = PROTECT(allocVector(INTSXP, out->n_observations * out->n_coordinates));
+	memcpy(INTEGER(r_data), out->data, out->n_coordinates * out->n_observations * sizeof *out->data);
 
 	SEXP r_best_criterion = PROTECT(allocVector(REALSXP, opt->K));
 	memcpy(REAL(r_best_criterion), out->best_criterion, opt->K * sizeof *out->best_criterion);
 	
-	PROTECT(r_list = allocVector(VECSXP, 4));
+	PROTECT(r_list = allocVector(VECSXP, 5));
 	SET_VECTOR_ELT(r_list, 0, r_best_cluster_size);
 	SET_VECTOR_ELT(r_list, 1, r_best_criterion);
 	SET_VECTOR_ELT(r_list, 2, r_best_cluster_id);
 	SET_VECTOR_ELT(r_list, 3, r_best_modes);
-	UNPROTECT(5);
+	SET_VECTOR_ELT(r_list, 4, r_data);
 
 	if (opt)
 		free_opt(opt);
 	if (out)
 		free_res(out);
-
+	UNPROTECT(6);
 	return r_list;
 }
 

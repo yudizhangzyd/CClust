@@ -45,6 +45,7 @@
 #'    \item \code{"total_best_criterion"}: Total optimized criterion of the best initialization.
 #'    \item \code{"clsuter_size"}: Number of clusters.
 #'    \item \code{"data_dim"}: Dimension of input data.
+#'    \item \code{"data"}: The input data.
 #' }
 #'
 #' @useDynLib CClust r_kmodes
@@ -135,8 +136,10 @@ kmodes <- function(K = 1,
   res <- .Call("r_kmodes", K , datafile, n_init, algorithm,
                init_method, seed, shuffle)
   names(res) <- c("best_cluster_size", "best_seed_idx",
-                  "best_criterion", "best_cluster_id", "best_modes")
+                  "best_criterion", "best_cluster_id",
+                  "best_modes", "data")
   res[[5]] <- matrix(res[[5]], nrow = K, byrow = TRUE)
+  res[[6]] <- matrix(res[[6]], nrow = length(res[[4]]), byrow = TRUE)
   res$total_best_criterion <- sum(res$best_criterion)
   res$cluster_size <- K
   res$data_dim <- c(length(res[[4]]), dim(res[[5]])[2])
