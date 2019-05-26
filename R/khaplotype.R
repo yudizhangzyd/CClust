@@ -87,7 +87,7 @@ khaplotype <- function(K = 1,
     stop ("The number of initialization should be more than 0!")
 
   if (utils::tail(unlist(strsplit(datafile, "[.]")), 1) != "fastq")
-    stop ("The input datafile has to be fastq file when setting run_with_quals = TRUE!")
+    stop ("The input datafile has to be fastq file!")
 
   checkmate::expect_string(algorithm, info = "The input algorithm must be a string.")
   checkmate::expect_choice(algorithm, choices = c("FASTQ_LLOYDS_EFFICIENT", "FASTQ_LLOYDS", "FASTQ_HW_EFFICIENT",
