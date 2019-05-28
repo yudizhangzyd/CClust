@@ -135,8 +135,11 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Read a fastq file</span>
-<span class='no'>datFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"inst/extdata/sim.fastq"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>read_fastq</span>(<span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>)</div></pre>
+<span class='no'>datFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"sim.fastq"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>read_fastq</span>(<span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>)</div><div class='output co'>#&gt; Minimum quality score: ( (40)
+#&gt; Maximum quality score: G (71)
+#&gt; Minimum read length: 251
+#&gt; Maximum read length: 251</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
