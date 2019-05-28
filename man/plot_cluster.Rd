@@ -24,13 +24,17 @@ discriminant functions to retain.
 }
 \examples{
 # use function \\code{kmodes}
+\dontrun{
 data <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 plot_cluster(res_kmodes)
+}
 
 # use function \\code{khaplotype}
+\dontrun{
 data <- system.file("extdata", "sim_small.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 plot_cluster(res_khap, isGene = TRUE)
+}
 }

@@ -148,39 +148,19 @@ discriminant functions to retain.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># use function \code{kmodes}</span>
+    <pre class="examples"><div class='input'># use function \code{kmodes}
+</div><span class='co'># NOT RUN {</span>
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"zoo.int.data"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
 <span class='no'>res_kmodes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='kmodes.html'>kmodes</a></span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"KMODES_HARTIGAN_WONG"</span>,
 <span class='kw'>init_method</span> <span class='kw'>=</span> <span class='st'>"KMODES_INIT_AV07_GREEDY"</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-<span class='fu'>plot_cluster</span>(<span class='no'>res_kmodes</span>)</div><div class='img'><img src='plot_cluster-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Choose the number PCs to retain (&gt;=1): </div><div class='img'><img src='plot_cluster-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Choose the number discriminant functions to retain (&gt;=1): </div><div class='img'><img src='plot_cluster-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># use function \code{khaplotype}</span>
+<span class='fu'>plot_cluster</span>(<span class='no'>res_kmodes</span>)
+<span class='co'># }</span><div class='input'>
+# use function \code{khaplotype}
+</div><span class='co'># NOT RUN {</span>
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"sim_small.fastq"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
-<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='khaplotype.html'>khaplotype</a></span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; Minimum quality score: ( (40)
-#&gt; Maximum quality score: G (71)
-#&gt; Minimum read length: 251
-#&gt; Maximum read length: 251
-#&gt; Time cost: 0.212071 secs
-#&gt; Log likelihood in 1th initialization: -75606.42 (3 iterations: 1084 15)
-#&gt; Time cost: 0.156068 secs
-#&gt; Log likelihood in 2th initialization: -63884.51 (2 iterations: 136 1040)
-#&gt; Time cost: 0.160668 secs
-#&gt; Log likelihood in 3th initialization: -91181.97 (2 iterations: 143 36)
-#&gt; Time cost: 0.145540 secs
-#&gt; Log likelihood in 4th initialization: -72785.37 (3 iterations: 267 143)
-#&gt; Time cost: 0.142345 secs
-#&gt; Log likelihood in 5th initialization: -75707.08 (2 iterations: 1001 183)
-#&gt; Time cost: 0.144171 secs
-#&gt; Log likelihood in 6th initialization: -76233.37 (2 iterations: 144 136)
-#&gt; Time cost: 0.211105 secs
-#&gt; Log likelihood in 7th initialization: -77343.94 (4 iterations: 144 1170)
-#&gt; Time cost: 0.142287 secs
-#&gt; Log likelihood in 8th initialization: -129297.54 (2 iterations: 17 1280)
-#&gt; Time cost: 0.141024 secs
-#&gt; Log likelihood in 9th initialization: -110888.89 (2 iterations: 15 1425)
-#&gt; Time cost: 0.146201 secs
-#&gt; Log likelihood in 10th initialization: -95882.77 (2 iterations: 36 1639)
-#&gt; Time cost is: 1.601718 secs
-#&gt; Best optimum is: -63884.512728</div><div class='input'><span class='fu'>plot_cluster</span>(<span class='no'>res_khap</span>, <span class='kw'>isGene</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plot_cluster-4.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Choose the number PCs to retain (&gt;=1): </div><div class='img'><img src='plot_cluster-5.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Choose the number discriminant functions to retain (&gt;=1): </div><div class='img'><img src='plot_cluster-6.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>res_khap</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='khaplotype.html'>khaplotype</a></span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='fu'>plot_cluster</span>(<span class='no'>res_khap</span>, <span class='kw'>isGene</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
