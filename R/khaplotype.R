@@ -125,6 +125,11 @@ khaplotype <- function(K = 1,
   names(res) <- c("best_cluster_size", "best_criterion",
                   "best_cluster_id", "best_modes", "data")
 
+  res$data[res$data == 0] <- "A"
+  res$data[res$data == 1] <- "C"
+  res$data[res$data == 2] <- "T"
+  res$data[res$data == 3] <- "G"
+
   res$total_best_criterion <- sum(res$best_criterion)
   res$cluster_size <- K
   res$data_dim <- c(length(res[[3]]), dim(res[[4]])[2])
