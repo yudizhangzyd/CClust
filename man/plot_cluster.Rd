@@ -4,10 +4,17 @@
 \alias{plot_cluster}
 \title{Plotting clusters after using \code{kmodes} or \code{khaplotype} function.}
 \usage{
-plot_cluster(res, isGene = FALSE)
+plot_cluster(res, xax = 1, yax = 2, isGene = FALSE)
 }
 \arguments{
 \item{res}{Results returned from \code{kmodes} or \code{khaplotype}.}
+
+\item{xax}{Integer specifying which principal components should be shown in x axes,
+default is 1.}
+
+\item{yax}{Integer specifying which principal components should be shown in y axes,
+default is 2. Notice both xax and yax should be at least smaller than the number of
+discriminant functions choosed.}
 
 \item{isGene}{Indicate if the clustering data is gene sequences, default if FALSE.}
 }
@@ -17,10 +24,10 @@ A plot reflecting clustering results.
 \description{
 Visulize clusters after using the cluster algorithms implemented in the functions.
 This cluster plot make use of the function \code{dapc} from package \code{adegenet}
-and function \code{scatter} from package \code{ade4}. The plot is based on observation
-assignment and discriminant analysis of principal components, therefore, when running
-the code, it will asks you to choose the number PCs to retain and choose the number
-discriminant functions to retain.
+and function \code{scatter.dapc} from package \code{adegenet}. The plot is based on
+observation assignment and discriminant analysis of principal components, therefore,
+when running the code, it will asks you to choose the number of PCs and the number
+of discriminant functions to retain.
 }
 \examples{
 # use function \\code{kmodes}
@@ -29,6 +36,9 @@ data <- system.file("extdata", "zoo.int.data", package = "CClust")
 res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 init_method = "KMODES_INIT_AV07_GREEDY", n_init = 10)
 plot_cluster(res_kmodes)
+
+#Plot the clusters by using other principle components.
+plot_cluster(res_kmodes, xax = 2, yax = 3)
 }
 
 # use function \\code{khaplotype}

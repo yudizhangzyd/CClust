@@ -303,11 +303,14 @@ ARI(res_khap, true_assignments)
 
 ## Plotting {#Plotting}
 
-The function `plot_cluster` helps to visulize clusters after using the cluster algorithms implemented in the functions. This cluster plot make use of the function \code{dapc} from package \code{adegenet} and function \code{scatter} from package \code{ade4}. The plot is based on observation assignment and discriminant analysis of principal components, therefore, when running the code, it will asks users to choose the number PCs to retain and choose the number  discriminant functions to retain.
+The function `plot_cluster` helps to visulize clusters after using the cluster algorithms implemented in the functions. This cluster plot make use of the function \code{dapc} from package \code{adegenet} and function \code{scatter.dapc} from package \code{adegenet}. The plot is based on observation assignment and discriminant analysis of principal components, therefore,
+when running the code, it will asks you to choose the number of PCs and the number of discriminant functions to retain.
 
 **Inputs**
 
 - `res` Results returned from `kmodes` or `khaplotype`.
+- `xax` Integer specifying which principal components should be shown in x axes, default is 1.
+- `yax` Integer specifying which principal components should be shown in y axes, default is 2.
 - `isGene` Indicate if the clustering data is gene sequence.
 
 **Output**
@@ -326,10 +329,17 @@ res_kmodes <- kmodes(K = 5, datafile = data, algorithm = "KMODES_HARTIGAN_WONG",
 plot_cluster(res_kmodes)
 ```
 
-<img align="center" height="400" src="figs/kmodes.png">
+<img align="center" height="400" width = "650" src="figs/kmodes_default.png">
 
 ```{r, eval = FALSE}
-# read the data and use the function `kmodes` with default setting to do the clustering
+# Plot the clusters by using other principle components
+plot_cluster(res_kmodes, xax = 2, yax = 3)
+```
+
+<img align="center" height="400" width = "650" src="figs/kmodes_changed_pc.png">
+
+```{r, eval = FALSE}
+# read the data and use the function `khaplotype` with default setting to do the clustering
 data <- system.file("extdata", "sim_small.fastq", package = "CClust")
 res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 
@@ -337,6 +347,7 @@ res_khap <- khaplotype(K = 5, datafile = data, n_init = 10)
 plot_cluster(res_khap, isGene = TRUE)
 ```
 
-<img align="center" height="400" src="figs/khap.png">
+<img align="center" height="400" width = "650" src="figs/khap.png">
+
 
 # Reference

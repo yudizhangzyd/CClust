@@ -34,10 +34,10 @@
 
 <meta property="og:description" content="Visulize clusters after using the cluster algorithms implemented in the functions.
 This cluster plot make use of the function dapc from package adegenet
-and function scatter from package ade4. The plot is based on observation
-assignment and discriminant analysis of principal components, therefore, when running
-the code, it will asks you to choose the number PCs to retain and choose the number
-discriminant functions to retain." />
+and function scatter.dapc from package adegenet. The plot is based on
+observation assignment and discriminant analysis of principal components, therefore,
+when running the code, it will asks you to choose the number of PCs and the number
+of discriminant functions to retain." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,14 +120,14 @@ discriminant functions to retain." />
     
     <p>Visulize clusters after using the cluster algorithms implemented in the functions.
 This cluster plot make use of the function <code>dapc</code> from package <code>adegenet</code>
-and function <code>scatter</code> from package <code>ade4</code>. The plot is based on observation
-assignment and discriminant analysis of principal components, therefore, when running
-the code, it will asks you to choose the number PCs to retain and choose the number
-discriminant functions to retain.</p>
+and function <code>scatter.dapc</code> from package <code>adegenet</code>. The plot is based on
+observation assignment and discriminant analysis of principal components, therefore,
+when running the code, it will asks you to choose the number of PCs and the number
+of discriminant functions to retain.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>plot_cluster</span>(<span class='no'>res</span>, <span class='kw'>isGene</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>plot_cluster</span>(<span class='no'>res</span>, <span class='kw'>xax</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>yax</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>isGene</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,6 +135,17 @@ discriminant functions to retain.</p>
     <tr>
       <th>res</th>
       <td><p>Results returned from <code>kmodes</code> or <code>khaplotype</code>.</p></td>
+    </tr>
+    <tr>
+      <th>xax</th>
+      <td><p>Integer specifying which principal components should be shown in x axes,
+default is 1.</p></td>
+    </tr>
+    <tr>
+      <th>yax</th>
+      <td><p>Integer specifying which principal components should be shown in y axes,
+default is 2. Notice both xax and yax should be at least smaller than the number of
+discriminant functions choosed.</p></td>
     </tr>
     <tr>
       <th>isGene</th>
@@ -154,6 +165,9 @@ discriminant functions to retain.</p>
 <span class='no'>res_kmodes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='kmodes.html'>kmodes</a></span>(<span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"KMODES_HARTIGAN_WONG"</span>,
 <span class='kw'>init_method</span> <span class='kw'>=</span> <span class='st'>"KMODES_INIT_AV07_GREEDY"</span>, <span class='kw'>n_init</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 <span class='fu'>plot_cluster</span>(<span class='no'>res_kmodes</span>)
+
+<span class='co'>#Plot the clusters by using other principle components.</span>
+<span class='fu'>plot_cluster</span>(<span class='no'>res_kmodes</span>, <span class='kw'>xax</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>yax</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 <span class='co'># }</span><div class='input'>
 # use function \code{khaplotype}
 </div><span class='co'># NOT RUN {</span>

@@ -159,7 +159,7 @@ SEXP r_read_fastq(SEXP datafile_r)
 	
 	for (unsigned int i = 0; i < fdata->n_reads * fdata->n_max_length; ++i) {
 		INTEGER(r_reads)[i] = fdata->reads[i];
-		INTEGER(r_quals)[i] = fdata->quals[i];
+		INTEGER(r_quals)[i] = fdata->quals[i] + fdata->min_quality;
 	}
 	
 	PROTECT(r_list = allocVector(VECSXP, 3));
