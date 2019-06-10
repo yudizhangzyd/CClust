@@ -26,6 +26,10 @@ The package contains the following functions.
 
 `read_fastq` obtains amplicon datasets from a fastq file, extract and return a list of data information: reads, quality scores and dimension of data.
 
+#### simulator
+
+`simulator`: simulate clustered categorical datasets. 
+
 #### kmodes
 
 `kmodes` is for clustering categorical datasets without quality information of the data, different from function, it has six different random initialization methods and three k-means algorithms (Lloyd's; MacQueen's; Hartigan and Wong's algorithm) were adapted to do clustering.

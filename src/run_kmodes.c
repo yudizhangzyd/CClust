@@ -150,6 +150,102 @@ SEXP r_kmodes(SEXP K_r,
 	UNPROTECT(7);
 	return r_list;
 }
+
+SEXP r_simulate_data(SEXP simK_r,
+		     SEXP n_coordinates_r,
+		     SEXP n_observations_r,
+		     SEXP n_categories_r,
+		     SEXP sim_between_t_r,
+		     SEXP sim_within_t_r,
+		     SEXP use_dirichlet_r,
+		     SEXP sim_pi_r
+		     )
+{
+	int err = NO_ERROR;
+	options *opt = NULL;		/* command-line options */
+	data *dat = NULL;
+	SEXP r_list;
+	
+	int use_dirichlet = 0;
+	
+	/* parse command line */
+	if ((err = make_options(&opt)))
+		return R_NilValue;
+	
+	opt->sim_K = *INTEGER(simK_r);
+	opt->K = opt->sim_K;
+	opt->sim_n_categories = *INTEGER(n_categories_r);
+	opt->sim_n_observations = *INTEGER(n_observations_r);
+	opt->sim_n_coordinates = *INTEGER(n_coordinates_r);
+	opt->sim_within_t = *REAL(sim_within_t_r);
+	opt->sim_between_t = *REAL(sim_between_t_r);
+	opt->sim_pi = REAL(sim_pi_r);
+	use_dirichlet = *INTEGER(use_dirichlet_r);
+	
+	if (use_dirichlet) {
+		opt->sim_alpha = malloc(opt->sim_K
+					* sizeof *opt->sim_alpha);
+		if (!opt->sim_alpha) {
+			error("MEMORY_ALLOCATION::sim_alpha");
+			return R_NilValue;
+		}
+		memcpy(opt->sim_alpha, opt->sim_pi, opt->sim_K
+		       * sizeof *opt->sim_pi);
+	} else {
+		double sum = 0;
+		for (unsigned int j = 1; j < opt->sim_K; ++j)
+			sum += opt->sim_pi[j];
+		if (sum >= 1.) {
+			error("INVALID_USER_INPUT arguments must"
+			      "sum to 1.0.\n");
+			return R_NilValue;
+		}
+		opt->sim_pi[0] = 1 - sum;
+	}
+	
+	if ((err = make_data(&dat, opt)))
+		return R_NilValue;
+	
+	simulate_data(dat, opt);
+	
+	SEXP r_sim_prob = PROTECT(allocVector(REALSXP, 2));
+	REAL(r_sim_prob)[0] = opt->sim_between_prob;
+	REAL(r_sim_prob)[1] = opt->sim_within_prob;
+	
+	SEXP r_sim_modes = PROTECT(allocVector(INTSXP, opt->sim_K * dat->n_coordinates));
+	for (unsigned int k = 0; k < opt->sim_K; ++k)
+		for (unsigned int j = 0; j < dat->n_coordinates; ++j)
+			INTEGER(r_sim_modes)[j + k * dat->n_coordinates] = opt->sim_modes[k][j];
+	
+	SEXP r_sim_cluster = PROTECT(allocVector(INTSXP, dat->n_observations));
+	for (unsigned int i = 0; i < dat->n_observations; ++i)
+		INTEGER(r_sim_cluster)[i] = opt->sim_cluster[i];
+	
+	SEXP r_true_cluster_size = PROTECT(allocVector(INTSXP, opt->sim_K));
+	for (unsigned int k = 0; k < opt->sim_K; ++k)
+		INTEGER(r_true_cluster_size)[k] = opt->true_cluster_size[k];
+	
+	SEXP r_data = PROTECT(allocVector(INTSXP, dat->n_coordinates * dat->n_observations));
+	
+	for (unsigned int i = 0; i < dat->n_observations * dat->n_coordinates; ++i)
+		INTEGER(r_data)[i] = dat->data[i];
+	
+	PROTECT(r_list = allocVector(VECSXP, 5));
+	SET_VECTOR_ELT(r_list, 0, r_sim_prob);
+	SET_VECTOR_ELT(r_list, 1, r_sim_modes);
+	SET_VECTOR_ELT(r_list, 2, r_sim_cluster);
+	SET_VECTOR_ELT(r_list, 3, r_true_cluster_size);
+	SET_VECTOR_ELT(r_list, 4, r_data);
+	
+	if (opt)
+		free_options(opt);
+	if (dat)
+		free_data(dat);
+	
+	PutRNGstate();
+	UNPROTECT(6);
+	return r_list;
+}
 #endif
 
 int c_kmodes(options *opt, outres **out)
@@ -1429,10 +1525,12 @@ void free_options(options *opt) {
 			free(opt->seed_set);
 			opt->seed_set = NULL;
 		}
+#ifdef STANDALONE
 		if (opt->sim_pi) {
 			free(opt->sim_pi);
 			opt->sim_pi= NULL;
 		}
+#endif
 		if (opt->sim_alpha) {
 			free(opt->sim_alpha);
 			opt->sim_alpha= NULL;
@@ -1894,71 +1992,72 @@ int simulate_data(data *dat, options *opt) {
 	size_t dim = opt->sim_n_categories * opt->sim_n_categories;	/* WARNING/BUG: may be very large! */
 	double *Pt = NULL;
 	double *a = malloc(dim * sizeof *a);
-
+	
 	dat->n_observations = opt->sim_n_observations;
 	dat->n_coordinates = opt->sim_n_coordinates;
-
+	
 	/* allocate simulated modes and data */
 	data_t *tmp = malloc(opt->sim_K * dat->n_coordinates
-		* sizeof **opt->sim_modes);
+			     * sizeof **opt->sim_modes);
 	opt->sim_modes = malloc(opt->sim_K * sizeof *opt->sim_modes);
 	/* allocate space for data */
 	dat->data = malloc(dat->n_coordinates * dat->n_observations
-		* sizeof *dat->data);
+			   * sizeof *dat->data);
 	dat->n_categories = calloc(dat->n_coordinates,
-		sizeof *dat->n_categories);
+				   sizeof *dat->n_categories);
 	opt->sim_cluster = malloc(dat->n_observations
-		* sizeof *opt->sim_cluster);
-
+				  * sizeof *opt->sim_cluster);
+	
 	if (!a || !tmp || !opt->sim_modes || !dat->data
-		|| !opt->sim_cluster || !dat->n_categories) {
+	    || !opt->sim_cluster || !dat->n_categories) {
 		err = MEMORY_ALLOCATION;
 		goto ABORT_SIMULATE_DATA;
 	}
 	opt->true_modes = opt->sim_modes;
 	opt->true_cluster = opt->sim_cluster;
-
+	
 	for (k = 0; k < opt->sim_K; ++k) {
 		opt->sim_modes[k] = tmp;
 		tmp += dat->n_coordinates;
 		dat->n_categories[k] = opt->sim_n_categories;
 		dat->cluster_size[k] = 0;
 	}
-
+	
 	/* allocate instantaneous rate matrix */
 	for (size_t i = 0; i < dim; ++i)
 		a[i] = opt->sim_between_t / factor;
 	for (unsigned int i = 0; i < opt->sim_n_categories; ++i)
 		a[i*opt->sim_n_categories + i] = - (double)
-			(opt->sim_n_categories - 1) * opt->sim_between_t
-			/ factor;
-
+		(opt->sim_n_categories - 1) * opt->sim_between_t
+		/ factor;
+	
 	/* compute transition probability matrix */
 	Pt = r8mat_expm1(opt->sim_n_categories, a);
 	if (!Pt) {
 		err = MEMORY_ALLOCATION;
 		goto ABORT_SIMULATE_DATA;
 	}
-
+#ifdef STANDALONE
 	debug_msg(QUIET, opt->quiet, "Probability of no change: %f\n", Pt[0]);
+#endif
 	opt->sim_between_prob = Pt[0];
-
+	
 	do {
 		/* simulate modes */
 		for (unsigned int j = 0; j < dat->n_coordinates; ++j) {
 			data_t c_ancestor = (data_t) ((double) rand() / RAND_MAX
-				* opt->sim_n_categories);
+						      * opt->sim_n_categories);
 			/* simulate ancestor character */
 			for (k = 0; k < opt->sim_K; ++k) {
 				double r = (double) rand() / RAND_MAX;
 				data_t l = 0;
 				for (dsum = Pt[c_ancestor*opt->sim_n_categories];
-					dsum < r; dsum += Pt[c_ancestor
-						* opt->sim_n_categories + ++l]);
+				     dsum < r; dsum += Pt[c_ancestor
+							  * opt->sim_n_categories + ++l]);
 				opt->sim_modes[k][j] = l;
 			}
 		}
-
+		
 		/* count number of distinct modes */
 		opt->true_K = 1;
 		for (unsigned int k = 1; k < opt->sim_K; ++k) {
@@ -1966,9 +2065,9 @@ int simulate_data(data *dat, options *opt) {
 			for (unsigned int j = 0; j < k; ++j) {
 				same = 1;
 				for (unsigned int i = 0; i < dat->n_coordinates;
-					++i)
+				     ++i)
 					if (opt->sim_modes[k][i]
-						!= opt->sim_modes[j][i]) {
+					    != opt->sim_modes[j][i]) {
 						same = 0;
 						break;
 					}
@@ -1979,61 +2078,63 @@ int simulate_data(data *dat, options *opt) {
 				++opt->true_K;
 		}
 	} while (opt->require_sim_K && opt->true_K < opt->sim_K);
-
+	
 	if (opt->true_K < opt->sim_K) {
 		mmessage(WARNING_MSG, NO_ERROR, "Asked to simulate %u modes, "
-			"but only %u are unique (possibility not ready).\n",
-			opt->sim_K, opt->true_K);
+			 "but only %u are unique (possibility not ready).\n",
+			 opt->sim_K, opt->true_K);
 		goto ABORT_SIMULATE_DATA;
 	}
-
+	
 	/* allocate space for true cluster sizes */
 	opt->true_cluster_size = malloc(opt->true_K *
-		sizeof *opt->true_cluster_size);
+					sizeof *opt->true_cluster_size);
 	if (!opt->true_cluster_size) {
 		err = mmessage(ERROR_MSG, MEMORY_ALLOCATION,
-			"options:true_cluster_size");
+			       "options:true_cluster_size");
 		goto ABORT_SIMULATE_DATA;
 	}
-
+	
 	/* reset instantaneous rate matrix and transition probability matrix */
 	for (size_t i = 0; i < dim; ++i)
 		a[i] = opt->sim_within_t / factor;
 	for (unsigned int i = 0; i < opt->sim_n_categories; ++i)
 		a[i*opt->sim_n_categories + i] = - (double)
-			(opt->sim_n_categories - 1) * opt->sim_within_t
-			/ factor;
-
+		(opt->sim_n_categories - 1) * opt->sim_within_t
+		/ factor;
+	
 	free(Pt);
 	Pt = r8mat_expm1(opt->sim_n_categories, a);
 	if (!Pt) {
 		err = MEMORY_ALLOCATION;
 		goto ABORT_SIMULATE_DATA;
 	}
+#ifdef STANDALONE
 	debug_msg(QUIET, opt->quiet, "Probability of no change: %f\n", Pt[0]);
+#endif
 	opt->sim_within_prob = Pt[0];
-
+	
 	/* verify that the simulated mode is the theoretical mode */
 	for (data_t l = 0; l < opt->sim_n_categories; ++l) {
 		dsum = 0;
 		for (data_t j = 0; j < opt->sim_n_categories; ++j) {
 			dsum += Pt[l*opt->sim_n_categories + j];
 			if (l != j && Pt[l*opt->sim_n_categories + l]
-				< Pt[l*opt->sim_n_categories + j]) {
+			    < Pt[l*opt->sim_n_categories + j]) {
 				err = mmessage(ERROR_MSG,
-					INVALID_USER_INPUT, "Within "
-					"cluster time (%f) is too "
-					"large\n", opt->sim_within_t);
+					       INVALID_USER_INPUT, "Within "
+					       "cluster time (%f) is too "
+					       "large\n", opt->sim_within_t);
 				goto ABORT_SIMULATE_DATA;
 			}
 		}
 		if (fabs(dsum - 1.) > 1e-6) {
 			err = mmessage(ERROR_MSG, INTERNAL_ERROR,
-				"matrix exponentiation failed\n");
+				       "matrix exponentiation failed\n");
 			goto ABORT_SIMULATE_DATA;
 		}
 	}
-
+	
 	unsigned int true_k = 0;
 	do {
 		/* simulate pi */
@@ -2055,73 +2156,77 @@ int simulate_data(data *dat, options *opt) {
 			}
 			for (k = 0; k < opt->sim_K; ++k)
 				opt->sim_pi[k] /= sum;
+#ifdef MATHLIB_STANDALONE
 			debug_msg(QUIET, opt->quiet, "Simulated pi: ");
 			if (QUIET <= opt->quiet)
 				fprint_doubles(stderr, opt->sim_pi, opt->sim_K,
-					3, 1);
+					       3, 1);
+#endif
 		}
-
+		
 		for (unsigned int k = 0; k < opt->true_K; ++k)
 			opt->true_cluster_size[k] = 0;
-
+		
 		/* simulate data */
 		for (unsigned int i = 0; i < dat->n_observations; ++i) {
-
+			
 			/* choose cluster */
 			double r = (double) rand() / RAND_MAX;
 			for (k = 0, dsum = opt->sim_pi[0];
-				dsum < r; dsum += opt->sim_pi[++k]);
+			     dsum < r; dsum += opt->sim_pi[++k]);
 			opt->sim_cluster[i] = k;
 			++opt->true_cluster_size[k];
 			for (unsigned int j = 0; j < dat->n_coordinates; ++j) {
 				data_t c_ancestor = opt->sim_modes[k][j];
-
+				
 				/* choose coordinate */
 				r = (double) rand() / RAND_MAX;
 				data_t l = 0;
 				for (dsum = Pt[c_ancestor*opt->sim_n_categories];
-					dsum < r; dsum += Pt[c_ancestor
-						* opt->sim_n_categories + ++l]);
+				     dsum < r; dsum += Pt[c_ancestor
+							  * opt->sim_n_categories + ++l]);
 				dat->data[i*dat->n_coordinates + j] = l;
-
+				
 			}
 		}
-
+		
 		true_k = 0;
 		for (unsigned int k = 0; k < opt->true_K; ++k)
 			if (opt->true_cluster_size[k]) ++true_k;
 	} while (opt->require_sim_K && true_k < opt->true_K);
-
+	
 	if (true_k < opt->true_K) {
 		mmessage(WARNING_MSG, NO_ERROR, "Simulated %u distinct modes, "
-			"but only %u produced data (not implemented).\n",
-			opt->true_K, true_k);
+			 "but only %u produced data (not implemented).\n",
+			 opt->true_K, true_k);
 		goto ABORT_SIMULATE_DATA;
 	}
-
+	
+#ifdef STANDALONE
 	FILE *fp = NULL;
 	if (opt->datafile) {
 		fp = fopen(opt->datafile, "w");
 		if (!fp) {
 			err = mmessage(ERROR_MSG, FILE_OPEN_ERROR,
-				opt->datafile);
+				       opt->datafile);
 			goto ABORT_SIMULATE_DATA;
 		}
-
+		
 		for (unsigned int i = 0; i < dat->n_observations; ++i) {
 			/* first column is true assignments */
 			fprintf(fp, "%u", opt->sim_cluster[i]);
 			fprint_data_ts(fp, &dat->data[i*dat->n_coordinates],
-				dat->n_coordinates, 0, 1);
+				       dat->n_coordinates, 0, 1);
 		}
 		fclose(fp);
 	}
-
-
+#endif
+	
+	
 ABORT_SIMULATE_DATA:
 	if (Pt) free(Pt);
 	if (a) free(a);
-
+	
 	return err;
 } /* simulate_data */
 
