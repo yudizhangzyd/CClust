@@ -73,7 +73,7 @@
       <h1>CClust: Clustering Categorical Datasets</h1>
                         <h4 class="author">R Package Version 0.0.0.9</h4>
             
-            <h4 class="date">2019-05-31</h4>
+            <h4 class="date">2019-06-11</h4>
       
       
       <div class="hidden name"><code>CClust-vignette.Rmd</code></div>
@@ -99,19 +99,23 @@
 <div id="package-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#package-structure" class="anchor"></a>Package Structure</h2>
-<p><code>CClust</code> is structured so the available functions fall under one of three categories.</p>
+<p><code>CClust</code> is structured so the available functions fall under one of four categories.</p>
 <ol style="list-style-type: decimal">
 <li>
 <a href="#read_data">Read data</a>: The first manner in which <code>CClust</code> can be used is to obtain amplicon datasets from a fastq file. This is done using the function <a href="#read_fastq"><strong><code>read_fastq</code></strong></a> to extract and return a list of data information: reads, quality scores and dimension of data.</li>
 </ol>
 <ol start="2" style="list-style-type: decimal">
 <li>
-<a href="#clustering">Clustering</a>: The second way to utilize <code>CClust</code> is to clustering categorical datasets using the following functions.</li>
+<a href="#simulate">Simulate data</a>: The second way to utilize <code>CClust</code> is to is to Simulate clustered categorical datasets. This is done using the function <a href="#simulator"><strong><code>simulator</code></strong></a> to simulate clustered categorical datasets by using continous time Marcov chain.</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li>
+<a href="#clustering">Clustering</a>: The third way to utilize <code>CClust</code> is to clustering categorical datasets using the following functions.</li>
 </ol>
 <p>-<a href="#khaplotype"><strong><code>khaplotype</code></strong></a>: Clustering the amplicon datasets with quality scores, only random initialization is avaiable in <code>khaplotype</code>.</p>
 <p>-<a href="#kmodes"><strong><code>kmodes</code></strong></a>: Clustering categorical datasets without quality information of the data, different from function <code>khaplotype</code>, it has six different random initialization methods.</p>
 
-<ol start="3" style="list-style-type: decimal">
+<ol start="4" style="list-style-type: decimal">
 <li>
 <a href="#evaluation">Evaluation</a>: Lastly, <code>CClust</code> can be employed to evaluate the clustering result by the following functions.</li>
 </ol>
@@ -172,6 +176,7 @@
 <ol style="list-style-type: decimal">
 <li><p>The <code>zoo.int.data</code> dataset is from the UCI Machine Learning Repository <span class="citation">(Lichman. 2013)</span>. It includes one numeric coordinate, number of legs, which is treated as categorical.</p></li>
 <li><p>The <code>sim.fastq</code> dataset is sampled from a subset of an amplicon dataset mentioned in the paper DADA2 <span class="citation">(Callahan et al. 2016)</span>. Accordingly, the <code>assignment.txt</code> is the true assignment of that simulation data.</p></li>
+<li><p>The <code>sim_small.fastq</code> dataset is a smaller simulated amplicon dataset from the same source mentioned above, it is for demonstrating the use of <code>plot_cluster</code>.</p></li>
 </ol>
 <p><br></p>
 </div>
@@ -190,7 +195,7 @@
 </ul>
 <p><strong>Output</strong></p>
 <ul>
-<li>Return a list contains reads, quality socres (encoded using ASCII 33 to 126). and dim of the data.</li>
+<li>Return a list contains reads, quality socres (encoded using ASCII 33 to 126) and the dim of the data.</li>
 </ul>
 <p><strong>Functionality</strong></p>
 <p>The code below demonstrates the use of <code>read_fastq</code>.</p>
@@ -215,6 +220,51 @@
 <a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; [3,]   67   67   67   67   67   69   71   71   71    71</span></a>
 <a class="sourceLine" id="cb3-20" data-line-number="20">dat<span class="op">$</span>dim</a>
 <a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; [1] 10000   251</span></a></code></pre></div>
+<p><br></p>
+</div>
+</div>
+<div id="simulator" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simulator" class="anchor"></a>Simulate data</h1>
+<p><code>CClust</code> can also be used to simulate clustered categorical datasets. This can be done using the function in the package named <code>simulator</code>.</p>
+<div id="usage-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage-1" class="anchor"></a>Usage</h2>
+<p><strong>Input</strong></p>
+<ul>
+<li>
+<code>simK</code> Number of clusters.</li>
+<li>
+<code>n_coordinates</code> Number of coordinate of the simulated dataset.</li>
+<li>
+<code>n_observations</code> Number of observation of the simulated dataset.</li>
+<li>
+<code>sim_between_t</code> Between cluster variation.</li>
+<li>
+<code>sim_within_t</code> Within cluster variation.</li>
+<li>
+<code>use_dirichlet</code> Indicate if cimulate datasets with dirichlet prior. Defalut is FALSE.</li>
+<li>
+<code>sim_pi</code> Mixing proportions, a vector with the same length of specified number of clusters and the sum of the values in this vector has to be 1.</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li>Return a list of simulation dataset results, including the CTMC_probabilities, the true modes, the cluster_assignments, the cluster_sizes and simulated data.</li>
+</ul>
+<p><strong>Functionality</strong></p>
+<p>The code below demonstrates the use of <code>simulator</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Simulate data with dim 50 * 5, 4 different categories and there are 5 true clusters.</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simulator.html">simulator</a></span>(<span class="dt">simK =</span> <span class="dv">5</span>, <span class="dt">n_coordinates =</span> <span class="dv">5</span>, <span class="dt">n_observations =</span> <span class="dv">50</span>, <span class="dt">n_categories =</span> <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="dt">sim_between_t =</span> <span class="dv">2</span>, <span class="dt">sim_within_t =</span> <span class="dv">1</span>, <span class="dt">use_dirichlet =</span> <span class="ot">TRUE</span>, <span class="dt">sim_pi =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>))</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(data<span class="op">$</span>data)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; [1,]    3    0    1    0    2</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; [2,]    0    0    3    1    0</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; [3,]    3    0    3    1    3</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; [4,]    3    3    1    2    2</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; [5,]    3    1    1    0    3</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; [6,]    1    1    1    3    1</span></a></code></pre></div>
 <p><br></p>
 </div>
 </div>
@@ -247,30 +297,30 @@
 <p>A list of clustering results. The following are returned detials: - <code>"best_cluster_size"</code>: Number of observations in each cluster of the best initialization. - <code>"best_criterion"</code>: Optimized criterion in each cluster of the best initialization. - <code>"best_cluster_id"</code>: Cluster assignment of each observation of the best initialization. - <code>"best_modes"</code>: Estimated modes for each cluster of the best initialization. - <code>"best_seed_index"</code>: Seed index of the best initialization. - <code>"total_best_criterion"</code>: Total optimized criterion of the best initialization. - <code>"clsuter_size"</code>: Number of clusters. - <code>"data_dim"</code>: Dimension of input data. - <code>"data"</code>: The input data.</p>
 <p><strong>Functionality</strong></p>
 <p>The code below shows how to use <code>kmodes</code> by changing types of algorithms and initialization methods. If run the algorithm more than one initialization, the <code>kmodes</code> function will return results of the initialization with the minimum <code>total_best_criterion</code>, which is the best solution among all of the initializations.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Clustering with three initializations, default algorithm ("KMODES_HUANG") and shuffel the data with choosing K as 5</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">datFile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"zoo.int.data"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">res_kmodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/kmodes.html">kmodes</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>, <span class="dt">shuffle =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co"># Number of observations in each cluster</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">res_kmodes<span class="op">$</span>best_cluster_size</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; [1] 21 19 23 19 19</span></a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Clustering with Harigan and Wong and K-means++ greedy adapted initialization method.</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">res_kmodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/kmodes.html">kmodes</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">algorithm =</span> <span class="st">"KMODES_HARTIGAN_WONG"</span>, <span class="dt">init_method =</span> <span class="st">"KMODES_INIT_AV07_GREEDY"</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co"># Mode in each cluster</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">res_kmodes<span class="op">$</span>best_modes</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; [1,]    0    1    0    0    1    0    0    0    1     1     1     0     0</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [2,]    6    0    0    1    0    0    0    1    0     0     1     0     0</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; [3,]    3    0    0    1    0    0    1    1    1     1     0     0     1</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; [4,]    0    0    0    0    1    0    1    1    1     1     1     0     1</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; [5,]    1    0    1    1    0    1    0    0    0     1     1     0     0</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;      [,14] [,15] [,16] [,17]</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; [1,]     2     1     0     1</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; [2,]     4     0     0     0</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; [3,]     0     1     0     0</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; [4,]     0     1     0     1</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; [5,]     1     1     0     0</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Clustering with three initializations, default algorithm ("KMODES_HUANG") and shuffel the data with choosing K as 5</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">datFile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"zoo.int.data"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">res_kmodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/kmodes.html">kmodes</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>, <span class="dt">shuffle =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co"># Number of observations in each cluster</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">res_kmodes<span class="op">$</span>best_cluster_size</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; [1] 21 19 23 19 19</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># Clustering with Harigan and Wong and K-means++ greedy adapted initialization method.</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">res_kmodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/kmodes.html">kmodes</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">algorithm =</span> <span class="st">"KMODES_HARTIGAN_WONG"</span>, <span class="dt">init_method =</span> <span class="st">"KMODES_INIT_AV07_GREEDY"</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># Mode in each cluster</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">res_kmodes<span class="op">$</span>best_modes</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; [1,]    0    1    0    0    1    0    0    0    1     1     1     0     0</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; [2,]    6    0    0    1    0    0    0    1    0     0     1     0     0</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; [3,]    3    0    0    1    0    0    1    1    1     1     0     0     1</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; [4,]    0    0    0    0    1    0    1    1    1     1     1     0     1</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; [5,]    1    0    1    1    0    1    0    0    0     1     1     0     0</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;      [,14] [,15] [,16] [,17]</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; [1,]     2     1     0     1</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; [2,]     4     0     0     0</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; [3,]     0     1     0     0</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; [4,]     0     1     0     1</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; [5,]     1     1     0     0</span></a></code></pre></div>
 </div>
 <div id="khaplotype" class="section level2">
 <h2 class="hasAnchor">
@@ -297,47 +347,47 @@
 <p>A list of clustering results. The following are returned detials: - <code>"best_cluster_size"</code>: Number of observations in each cluster of the best initialization. - <code>"best_criterion"</code>: Optimized criterion in each cluster of the best initialization. - <code>"best_cluster_id"</code>: Cluster assignment of each observation of the best initialization. - <code>"best_modes"</code>: Estimated modes for each cluster of the best initialization. - <code>"total_best_criterion"</code>: Total optimized criterion of the best initialization. - <code>"clsuter_size"</code>: Number of clusters. - <code>"data_dim"</code>: Dimension of input data. - <code>"data"</code>: Reads of the input data.</p>
 <p><strong>Functionality</strong></p>
 <p>The code below shows how to use <code>khaplotype</code> by changing types of algorithms. If run the algorithm more than one initialization, the <code>khaplotype</code> function will return results of the initialization with the maximum <code>total_best_criterion</code>, which is the best solution among all of the initializations.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">datFile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"sim.fastq"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Minimum quality score: ( (40)</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Maximum quality score: G (71)</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Minimum read length: 251</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Maximum read length: 251</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; Time cost: 1.046492 secs</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; Time cost: 0.604494 secs</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; Time cost: 0.637755 secs</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; Time cost is: 2.288831 secs</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; Best optimum is: -103562.999033</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co"># Number of observations in each cluster</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18">res_khap<span class="op">$</span>best_cluster_size</a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; [1] 2894  577 1557  200 4772</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co"># The value of objective function of the best solutions</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22">res_khap<span class="op">$</span>total_best_criterion</a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; [1] -103563</span></a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>, <span class="dt">algorithm =</span> <span class="st">"FASTQ_MACQUEEN"</span>, <span class="dt">shuffle =</span> <span class="ot">TRUE</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Minimum quality score: ( (40)</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; Maximum quality score: G (71)</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Minimum read length: 251</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Maximum read length: 251</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.072916 secs</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Log likelihood in 1th initialization: -197241.29 (2 iterations: 1552 4977)</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Time cost: 0.058113 secs</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Log likelihood in 2th initialization: -230540.18 (1 iterations: 4272 5607)</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; Time cost: 0.048800 secs</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; Log likelihood in 3th initialization: -200861.80 (1 iterations: 5070 17)</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; Time cost is: 0.180595 secs</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; Best optimum is: -197241.292293</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co"># Number of observations in each cluster</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17">res_khap<span class="op">$</span>best_cluster_size</a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; [1] 1552 4977 2889  571   11</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Clustering an amplicon dataset and run three initializations with default algorithm ("FASTQ_HW_EFFICIENT")</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">datFile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"sim.fastq"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; Minimum quality score: ( (40)</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Maximum quality score: G (71)</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Minimum read length: 251</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Maximum read length: 251</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Time cost: 0.994203 secs</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Time cost: 0.476693 secs</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; Time cost: 0.594506 secs</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; Time cost is: 2.065475 secs</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; Best optimum is: -103562.999033</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co"># Number of observations in each cluster</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">res_khap<span class="op">$</span>best_cluster_size</a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; [1] 2894  577 1557  200 4772</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co"># The value of objective function of the best solutions</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22">res_khap<span class="op">$</span>total_best_criterion</a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; [1] -103563</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># Clustering an amplicon dataset and run three initializations with MacQueen's algorithm (shuffle the data)</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>, <span class="dt">algorithm =</span> <span class="st">"FASTQ_MACQUEEN"</span>, <span class="dt">shuffle =</span> <span class="ot">TRUE</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Minimum quality score: ( (40)</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Maximum quality score: G (71)</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Minimum read length: 251</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Maximum read length: 251</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; Time cost: 0.061426 secs</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; Log likelihood in 1th initialization: -197241.29 (2 iterations: 1552 4977)</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; Time cost: 0.054643 secs</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; Log likelihood in 2th initialization: -230540.18 (1 iterations: 4272 5607)</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; Time cost: 0.044725 secs</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; Log likelihood in 3th initialization: -200861.80 (1 iterations: 5070 17)</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; Time cost is: 0.161535 secs</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; Best optimum is: -197241.292293</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co"># Number of observations in each cluster</span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">res_khap<span class="op">$</span>best_cluster_size</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; [1] 1552 4977 2889  571   11</span></a></code></pre></div>
 <p><br></p>
 </div>
 </div>
@@ -362,27 +412,27 @@
 </ul>
 <p><strong>Functionality</strong></p>
 <p>The code below shows how to access the clustering results using function <code>ARI</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># Estimate cluster assignments by function `khaplotype`.</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">datFile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"sim.fastq"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span> (<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Minimum quality score: ( (40)</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Maximum quality score: G (71)</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Minimum read length: 251</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; Maximum read length: 251</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; Time cost: 1.085225 secs</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; Time cost: 0.518071 secs</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; Time cost: 0.632065 secs</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; Time cost is: 2.235440 secs</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; Best optimum is: -103562.999033</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16">ass &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"assignment.txt"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">true_assignments &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(ass, <span class="dt">header =</span> F, <span class="dt">sep =</span> <span class="st">""</span>))</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co"># Higher ARI means the similar between two partitions, so the clustering reasults is better</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="kw"><a href="../reference/ARI.html">ARI</a></span>(res_khap, true_assignments)</a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; [1] 0.9513036</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Estimate cluster assignments by function `khaplotype`.</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">datFile &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"sim.fastq"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span> (<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> datFile, <span class="dt">n_init =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; Minimum quality score: ( (40)</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; Maximum quality score: G (71)</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; Minimum read length: 251</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; Maximum read length: 251</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; Time cost: 0.946890 secs</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; Log likelihood in 1th initialization: -108539.22 (5 iterations: 2979 4939)</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt; Time cost: 0.539785 secs</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt; Log likelihood in 2th initialization: -108624.68 (2 iterations: 5074 1)</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; Time cost: 0.702399 secs</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt; Log likelihood in 3th initialization: -103563.00 (3 iterations: 2894 577)</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt; Time cost is: 2.189169 secs</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; Best optimum is: -103562.999033</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16">ass &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"assignment.txt"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
+<a class="sourceLine" id="cb9-17" data-line-number="17">true_assignments &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(ass, <span class="dt">header =</span> F, <span class="dt">sep =</span> <span class="st">""</span>))</a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co"># Higher ARI means the similar between two partitions, so the clustering reasults is better</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="kw"><a href="../reference/ARI.html">ARI</a></span>(res_khap, true_assignments)</a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; [1] 0.9513036</span></a></code></pre></div>
 </div>
 <div id="Plotting" class="section level2">
 <h2 class="hasAnchor">
@@ -404,22 +454,22 @@
 <li>A plot reflecting clustering results.</li>
 </ul>
 <p><strong>Functionality</strong> The code below shows how to plot clusters after running the clustering algorithms using function <code>plot_cluster</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># read the data and use the function `kmodes` with default setting to do the clustering</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"zoo.int.data"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">res_kmodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/kmodes.html">kmodes</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> data, <span class="dt">algorithm =</span> <span class="st">"KMODES_HARTIGAN_WONG"</span>, <span class="dt">init_method =</span> <span class="st">"KMODES_INIT_AV07_GREEDY"</span>, <span class="dt">n_init =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co"># Plot the clusters</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="kw"><a href="../reference/plot_cluster.html">plot_cluster</a></span>(res_kmodes)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># read the data and use the function `kmodes` with default setting to do the clustering</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"zoo.int.data"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">res_kmodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/kmodes.html">kmodes</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> data, <span class="dt">algorithm =</span> <span class="st">"KMODES_HARTIGAN_WONG"</span>, <span class="dt">init_method =</span> <span class="st">"KMODES_INIT_AV07_GREEDY"</span>, <span class="dt">n_init =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co"># Plot the clusters</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw"><a href="../reference/plot_cluster.html">plot_cluster</a></span>(res_kmodes)</a></code></pre></div>
 <p><img align="center" height="400" width="650" src="figs/kmodes_default.png"></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># Plot the clusters by using other principle components</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="../reference/plot_cluster.html">plot_cluster</a></span>(res_kmodes, <span class="dt">xax =</span> <span class="dv">2</span>, <span class="dt">yax =</span> <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># Plot the clusters by using other principle components</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="../reference/plot_cluster.html">plot_cluster</a></span>(res_kmodes, <span class="dt">xax =</span> <span class="dv">2</span>, <span class="dt">yax =</span> <span class="dv">3</span>)</a></code></pre></div>
 <p><img align="center" height="400" width="650" src="figs/kmodes_changed_pc.png"></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># read the data and use the function `khaplotype` with default setting to do the clustering</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"sim_small.fastq"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> data, <span class="dt">n_init =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co"># Plot the clusters</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw"><a href="../reference/plot_cluster.html">plot_cluster</a></span>(res_khap, <span class="dt">isGene =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># read the data and use the function `khaplotype` with default setting to do the clustering</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"sim_small.fastq"</span>, <span class="dt">package =</span> <span class="st">"CClust"</span>)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">res_khap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/khaplotype.html">khaplotype</a></span>(<span class="dt">K =</span> <span class="dv">5</span>, <span class="dt">datafile =</span> data, <span class="dt">n_init =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co"># Plot the clusters</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw"><a href="../reference/plot_cluster.html">plot_cluster</a></span>(res_khap, <span class="dt">isGene =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img align="center" height="400" width="650" src="figs/khap.png"></p>
 </div>
 </div>
@@ -475,6 +525,11 @@
       <li>
 <a href="#read_data">Read Fastq File</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#usage">Usage</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#simulator">Simulate data</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#usage-1">Usage</a></li>
       </ul>
 </li>
       <li>
