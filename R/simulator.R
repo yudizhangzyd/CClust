@@ -32,11 +32,9 @@
 #' @export simulator
 #'
 #' @examples
-#' \dontrun{
 #' #Simulate data with dim 100 * 10, 4 different categories and there are 5 true clusters.
 #' data <- simulator(simK = 5, n_coordinates = 10, n_observations = 100, n_categories = 4,
 #' sim_between_t = 2, sim_within_t = 1, use_dirichlet = TRUE, sim_pi = c(0.1, 0.1, 0.2, 0.3, 0.3))
-#' }
 
 simulator <- function(simK,
                       n_coordinates,

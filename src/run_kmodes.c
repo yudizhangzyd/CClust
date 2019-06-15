@@ -206,6 +206,8 @@ SEXP r_simulate_data(SEXP simK_r,
 	if ((err = make_data(&dat, opt)))
 		return R_NilValue;
 	
+	GetRNGstate();
+	
 	simulate_data(dat, opt);
 	
 	SEXP r_sim_prob = PROTECT(allocVector(REALSXP, 2));
@@ -2140,18 +2142,12 @@ int simulate_data(data *dat, options *opt) {
 		/* simulate pi */
 		if (opt->sim_alpha) {
 			/* this is the only place the R rng is used */
-#ifdef MATHLIB_STANDALONE
+#ifdef STANDALONE
 			set_seed(rand(), rand());
-#else
-#ifndef STANDALONE
-			GetRNGstate();
-#endif
 #endif
 			double sum = 0;
 			for (k = 0; k < opt->sim_K; ++k) {
-#ifdef MATHLIB_STANDALONE
 				opt->sim_pi[k] = rgamma(opt->sim_alpha[k], 1.0);
-#endif
 				sum += opt->sim_pi[k];
 			}
 			for (k = 0; k < opt->sim_K; ++k)
