@@ -1,7 +1,7 @@
-#' Clustering amplicon datasets with quality scores.
+#' Clustering NGS datasets with quality scores.
 #'
 #' @description
-#' Implement three unsupervised clustering algorithms on amplicon datasets with quality scores.
+#' Implement three unsupervised clustering algorithms on NGS datasets with quality scores.
 #'
 #' @usage khaplotype(K = 1, datafile = NULL, n_init = 1, algorithm = "FASTQ_HW_EFFICIENT",
 #' seed = 0, shuffle = FALSE)

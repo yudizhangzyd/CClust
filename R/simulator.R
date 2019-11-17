@@ -3,13 +3,13 @@
 #' @description
 #' Simulate clustered categorical datasets by using continous time Marcov chain.
 #'
-#' @usage simulator(simK = 5, n_coordinates = 10, n_observations = 100,
-#' n_categories = 4, sim_between_t = 2, sim_within_t = FALSE,
-#' use_dirichlet = 0, sim_pi = c(0.1, 0.1, 0.2, 0.3, 0.3))
+#' @usage simulator(simK, n_coordinates, n_observations,
+#' n_categories, sim_between_t, sim_within_t, use_dirichlet = FALSE, sim_pi)
 #'
 #' @param simK Number of clusters.
 #' @param n_coordinates Number of coordinate of the simulated dataset.
 #' @param n_observations Number of observation of the simulated dataset.
+#' @param n_categories Number of categories of the simulated dataset.
 #' @param sim_between_t Between cluster variation.
 #' @param sim_within_t Within cluster variation.
 #' @param use_dirichlet Indicate if cimulate datasets with dirichlet prior. Defalut is FALSE.

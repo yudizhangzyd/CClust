@@ -21,7 +21,7 @@ read_fastq <- function(datafile = NULL)
 {
   checkmate::expect_file_exists(datafile, access = "r")
   if (utils::tail(unlist(strsplit(datafile, "[.]")), 1) != "fastq")
-    stop("The input datafile has to be fastq file when setting run_with_quals = TRUE!")
+    stop("The input datafile has to be fastq file!")
 
   if (!is.loaded("r_read_fastq", PACKAGE = "CClust")) {
     dyn.load("../src/CClust.so")

@@ -24,7 +24,11 @@ The package contains the following functions.
 
 #### read\_fastq 
 
-`read_fastq` obtains amplicon datasets from a fastq file, extract and return a list of data information: reads, quality scores and dimension of data.
+`read_fastq` obtains NGS datasets from a fastq file, extract and return a list of data information: reads, quality scores and dimension of data.
+
+#### read\_fasta
+
+`read_fasta` obtains NGS datasets from a fasta file, extract and return a list of data information: reads and dimension of data.
 
 #### simulator
 
@@ -36,7 +40,7 @@ The package contains the following functions.
 
 #### khaplotype
 
-`khaplotype` is for clustering the amplicon datasets with quality scores, only random initialization is avaiable, also three k-means algorithms (Lloyd's; MacQueen's; Hartigan and Wong's algorithm) were adapted to do clustering.
+`khaplotype` is for clustering the NGS datasets with quality scores, only random initialization is avaiable, also three k-means algorithms (Lloyd's; MacQueen's; Hartigan and Wong's algorithm) were adapted to do clustering.
 
 #### ARI
 

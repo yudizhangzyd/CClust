@@ -4,9 +4,8 @@
 \alias{simulator}
 \title{Simulate clustered categorical datasets.}
 \usage{
-simulator(simK = 5, n_coordinates = 10, n_observations = 100,
-n_categories = 4, sim_between_t = 2, sim_within_t = FALSE,
-use_dirichlet = 0, sim_pi = c(0.1, 0.1, 0.2, 0.3, 0.3))
+simulator(simK, n_coordinates, n_observations,
+n_categories, sim_between_t, sim_within_t, use_dirichlet = FALSE, sim_pi)
 }
 \arguments{
 \item{simK}{Number of clusters.}
@@ -14,6 +13,8 @@ use_dirichlet = 0, sim_pi = c(0.1, 0.1, 0.2, 0.3, 0.3))
 \item{n_coordinates}{Number of coordinate of the simulated dataset.}
 
 \item{n_observations}{Number of observation of the simulated dataset.}
+
+\item{n_categories}{Number of categories of the simulated dataset.}
 
 \item{sim_between_t}{Between cluster variation.}
 

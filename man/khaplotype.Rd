@@ -2,7 +2,7 @@
 % Please edit documentation in R/khaplotype.R
 \name{khaplotype}
 \alias{khaplotype}
-\title{Clustering amplicon datasets with quality scores.}
+\title{Clustering NGS datasets with quality scores.}
 \usage{
 khaplotype(K = 1, datafile = NULL, n_init = 1, algorithm = "FASTQ_HW_EFFICIENT",
 seed = 0, shuffle = FALSE)
@@ -24,7 +24,7 @@ seed = 0, shuffle = FALSE)
 Returns a list of clustering results.
 }
 \description{
-Implement three unsupervised clustering algorithms on amplicon datasets with quality scores.
+Implement three unsupervised clustering algorithms on NGS datasets with quality scores.
 }
 \details{
 Algorithms avaiable:
