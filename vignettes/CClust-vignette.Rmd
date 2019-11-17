@@ -46,7 +46,7 @@ There are two main functions `kmodes` and `khaplotype` coded for clsutering cate
 
 `CClust` is structured so the available functions fall under one of four categories. 
 
-1. [Read data](#read_data): The first manner in which `CClust` can be used is to obtain amplicon datasets from a fastq file. This is done using the function [**`read_fastq`**](#read_fastq) to extract and return a list of data information: reads, quality scores and dimension of data.
+1. [Read data](#read_data): The first manner in which `CClust` can be used is to obtain NGS datasets from a fastq(a) file. This is done using the function [**`read_fastq`**](#read_fastq) to extract and return a list of data information: reads, quality scores and dimension of data. And [**`read_fastq`**](#read_fasta) to extract and return a list of data information: reads and dimension of data.
 
 \vspace{0.25cm}
 
@@ -127,11 +127,11 @@ A greedy version of the algorithm mentioned above @Arthur07.
 
 <br>
 
-# Read Fastq File {#read_data}
+# Read data {#read_data}
+
+## Fastq File
 
 One of the ways to utilize `CClust` is to read the FASTQ file. This can be done using the function in the package named `read_fastq`.
-
-## Usage
 
 **Input**
 
@@ -156,11 +156,9 @@ dat$quality[1:3, 1:10]
 dat$dim
 ```
 
-# Read Fasta File {#read_data}
+## Fasta File
 
 Read a FASTA file.
-
-## Usage
 
 **Input**
 
