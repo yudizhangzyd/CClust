@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simulate clustered categorical datasets. — simulator • CClust</title>
+<title>Read a fasta file — read_fasta • CClust</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Simulate clustered categorical datasets. — simulator" />
-<meta property="og:description" content="Simulate clustered categorical datasets by using continous time Marcov chain." />
+<meta property="og:title" content="Read a fasta file — read_fasta" />
+<meta property="og:description" content="Read a fasta file (Reads need to be the same length)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,81 +112,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simulate clustered categorical datasets.</h1>
+    <h1>Read a fasta file</h1>
     
-    <div class="hidden name"><code>simulator.Rd</code></div>
+    <div class="hidden name"><code>read_fasta.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Simulate clustered categorical datasets by using continous time Marcov chain.</p>
+    <p>Read a fasta file (Reads need to be the same length).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simulator</span>(<span class='no'>simK</span>, <span class='no'>n_coordinates</span>, <span class='no'>n_observations</span>,
-<span class='no'>n_categories</span>, <span class='no'>sim_between_t</span>, <span class='no'>sim_within_t</span>, <span class='kw'>use_dirichlet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>sim_pi</span>)</pre>
+    <pre class="usage"><span class='fu'>read_fasta</span>(<span class='kw'>datafile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>simK</th>
-      <td><p>Number of clusters.</p></td>
-    </tr>
-    <tr>
-      <th>n_coordinates</th>
-      <td><p>Number of coordinate of the simulated dataset.</p></td>
-    </tr>
-    <tr>
-      <th>n_observations</th>
-      <td><p>Number of observation of the simulated dataset.</p></td>
-    </tr>
-    <tr>
-      <th>n_categories</th>
-      <td><p>Number of categories of the simulated dataset.</p></td>
-    </tr>
-    <tr>
-      <th>sim_between_t</th>
-      <td><p>Between cluster variation.</p></td>
-    </tr>
-    <tr>
-      <th>sim_within_t</th>
-      <td><p>Within cluster variation.</p></td>
-    </tr>
-    <tr>
-      <th>use_dirichlet</th>
-      <td><p>Indicate if cimulate datasets with dirichlet prior. Defalut is FALSE.</p></td>
-    </tr>
-    <tr>
-      <th>sim_pi</th>
-      <td><p>Mixing proportions, a vector with the same length of specified number of clusters
-and the sum of the values in this vector has to be 1.</p></td>
+      <th>datafile</th>
+      <td><p>Path to a fasta file.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list of simulation dataset results.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Value:</p><ul>
-<li><p><code>"CTMC_probabilities"</code>: Number of observations in each cluster of the best initialization.</p></li>
-<li><p><code>"modes"</code>: Simulated modes.</p></li>
-<li><p><code>"cluster_assignments"</code>: Simulated cluster assignments.</p></li>
-<li><p><code>"cluster_sizes"</code>: Simulated cluster sizes.</p></li>
-<li><p><code>"data"</code>: Simulated data.</p></li>
-</ul>
-
+    <p>Return a list contains reads and dim of the data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>#Simulate data with dim 100 * 10, 4 different categories and there are 5 true clusters.</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>simulator</span>(<span class='kw'>simK</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>n_coordinates</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>n_observations</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>n_categories</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-<span class='kw'>sim_between_t</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>sim_within_t</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>use_dirichlet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>sim_pi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.3</span>, <span class='fl'>0.3</span>))</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Read a fasta file</span>
+<span class='no'>datFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"sim.fasta"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CClust"</span>)
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>read_fasta</span>(<span class='kw'>datafile</span> <span class='kw'>=</span> <span class='no'>datFile</span>)</div><div class='output co'>#&gt; Minimum read length: 240
+#&gt; Maximum read length: 240</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
